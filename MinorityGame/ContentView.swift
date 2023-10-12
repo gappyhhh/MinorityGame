@@ -3,7 +3,7 @@
 //  Helloworld
 //
 //  Created by kazuhiro hirata on 2023/08/18.
-//
+//あいうえお
 
 import SwiftUI
 import Foundation
