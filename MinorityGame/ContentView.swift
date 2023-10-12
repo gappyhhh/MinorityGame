@@ -24,7 +24,7 @@ struct ContentView: View {
     @State var ButtonCount           = 1
     @State var anonymousWhich = false
     @State var anonymous = false
-    @State var CategoryArray:[String]  = ["","恋愛","スポーツ","仕事","芸能","学校","美容","生活","その他"]
+    @State var CategoryArray:[String]  = ["","恋愛","スポーツ","仕事","芸能","学校","美容","生活","その他","病院"]
     @State var selection          = 0
     @State var ThemeArray1:[String] = []
     @State var ThemeArray2:[String] = []
