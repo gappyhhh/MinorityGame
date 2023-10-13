@@ -15,7 +15,7 @@ struct TopTabView: View {
     var body: some View {
         let bounds = UIScreen.main.bounds
         let width = Int(bounds.width)
-        let high = Int(bounds.height)
+        let height = Int(bounds.height)
         
         HStack(spacing:0){
             ForEach(0..<list.count,id: \.self){row in

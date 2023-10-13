@@ -9,13 +9,13 @@
 import SwiftUI
 import Firebase
 import UIKit
-//--Bindingnikaerutokokarahajimeru
+
+//ContentViewで受け渡された変数はBindingで受け取る
 struct SecondView: View {
     @Binding var memberArray:[String]
     @Binding var memberArray2:[String]
     @Binding var memberAll:[String]
     @Binding var ButtonCount:Int
-    @Binding var anonymousWhich:Bool
     @Binding var anonymous:Bool
     @Binding var path: NavigationPath
     @Binding var ThemeArray1:[String]
@@ -37,9 +37,10 @@ struct SecondView: View {
         let bounds = UIScreen.main.bounds
         let width = Int(bounds.width)
         let height = Int(bounds.height)
+        
+        //本文
         ZStack {
-            // 背景色指定
-            
+            //背景指定
             if height/width < 2{
                 Image("Background9_16")
                     .resizable()
@@ -54,18 +55,18 @@ struct SecondView: View {
             }
            
             VStack(alignment: .center,spacing:20) {
-                // プレイ人数画像の定義
+                
                 Spacer()
+                // プレイ人数画像配置
                 Image("entry")
                     .resizable(capInsets: EdgeInsets())
                     .scaledToFit()
                     .frame(width:CGFloat(width)/1.3)
                 
-                // 人数設定
+                // 人数設定のボタンを横に並べる
                 HStack(alignment: .center,spacing:50) {
-                    // マイナスボタン定義
+                    // マイナスボタン配置
                     Button(action:{ButtonCount = ButtonCount - 1
-                        print(ButtonCount)
                         if (ButtonCount < 4) {
                             memberArray.removeLast()
                         } else {memberArray2.removeLast()}}) {
@@ -79,7 +80,7 @@ struct SecondView: View {
                     // 人数表示
                     Text("\(ButtonCount)").font(.system(size:50))
                     
-                    // プラスボタン定義
+                    // プラスボタン配置
                     Button(action:{ButtonCount = ButtonCount + 1
                         print(ButtonCount)
                         print(memberArray)
@@ -129,10 +130,12 @@ struct SecondView: View {
                 
                 // 「お題設定へ」ボタンの定義
                 Button(action:{memberAll.removeAll()
+                    //一列目と二列目のメンバー名を足してmemberAllにメンバー名を格納
                     memberAll.append(contentsOf: memberArray + memberArray2)
+                    //ContentViewで定義したcase "ビュー名"に遷移
                     path.append("ChooseTopicView")
-                       self.anonymousWhich = true
                 }) {
+                    //メンバー欄に空欄がある場合は、グレーのボタンを表示
                     if (memberArray.filter({$0.isEmpty}).count>0 || memberArray2.filter({$0.isEmpty}).count>0) {
                         Image("Decide_grey")
                             .renderingMode(.original)
@@ -153,6 +156,7 @@ struct SecondView: View {
                     
                     
                 }
+                //メンバー欄に空欄がある場合は、ボタンを押せなくする
                 .disabled(memberArray.filter({$0.isEmpty}).count>0 || memberArray2.filter({$0.isEmpty}).count>0)
 //                .navigationDestination(isPresented: $isPresented2) {
 //                ChooseTopicPage(memberAll:$memberAll,
@@ -181,13 +185,14 @@ struct SecondView: View {
     }
 }
     
+//以下はプレビュー表示で使用する。冒頭のBindingで定義した変数に初期値がいるため、.constantで定義。
+//.constant内の内容は、型さえ変数と合致していればなんでもいい。
 struct SecondView_Previews: PreviewProvider {
     static var previews: some View {
         SecondView(memberArray: .constant(["回答者の名前1"]),
                    memberArray2: .constant(["回答者の名前2"]),
                    memberAll: .constant(["回答者の名前全員"]),
                    ButtonCount: .constant(0),
-                   anonymousWhich: .constant(true),
                    anonymous: .constant(true),
                    path: .constant(NavigationPath("パス")),
                    ThemeArray1:.constant(["お題1"]),

@@ -13,7 +13,6 @@ struct ResultView: View {
     @Binding var memberArray2:[String]
     @Binding var memberAll:[String]
     @Binding var ButtonCount:Int
-    @Binding var anonymousWhich:Bool
     @Binding var anonymous:Bool
     @Binding var path: NavigationPath
     @Binding var ThemeArray1:[String]
@@ -243,7 +242,6 @@ struct ResultView_Previews: PreviewProvider {
                    memberArray2: .constant(["回答者の名前2"]),
                    memberAll: .constant(["回答者の名前全員"]),
                    ButtonCount: .constant(0),
-                   anonymousWhich: .constant(true),
                    anonymous: .constant(true),
                    path: .constant(NavigationPath("パス")),
                    ThemeArray1:.constant(["お題1"]),

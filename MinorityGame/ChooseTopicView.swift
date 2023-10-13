@@ -11,24 +11,27 @@ import UIKit
 
 struct ChooseTopicView: View {
     
-    @State private var selectedTab:Int = 0
+    @State private var selectedTab:Int = 0 //選択されているタブ（みんなのお題で遊ぶとお題を自分で作成）の番号
     @State private var canSwipe:Bool = false
+        //タブの切り替えをスワイプで出来なくする判定
     @State private var share = true
+        //お題をアップロードするか否かの判定
     @ObservedObject var model = ViewModel()
+        //MinorityModelファイル内のクラス
     @FocusState private var isKeybordon : Bool
-    @State var DecideTheme:Bool        = false
-    @State var Inputself:Bool        = false
+        //キーボード出現の有無
     @State private var animate = false
-    @State var Themedata = true
-    @State var sign = false
+        //回転の開始判定
     @State var Loading = false
+        //ローディング画面の開始判定
     @State var Decide : Bool = false
+        //アラート（アップロードOKか）表示の判定
     @State var RemovenumberArray:[Int] = []
+        ////回答済+報告済のお題番号を格納
     @Binding var memberArray:[String]
     @Binding var memberArray2:[String]
     @Binding var memberAll:[String]
     @Binding var ButtonCount:Int
-    @Binding var anonymousWhich:Bool
     @Binding var anonymous:Bool
     @Binding var path: NavigationPath
     @Binding var ThemeArray1:[String]
@@ -46,7 +49,6 @@ struct ChooseTopicView: View {
     @Binding var noInternetaccess:Bool
     @Binding var AlreadyThemeArray:[[String]]
     @Binding var ThemeidArray:[String]
-    @Binding var ThemeUploadWhich:Bool
     @Binding var Question:String
     @Binding var Theme1 :String
     @Binding var Theme2 :String
@@ -60,6 +62,7 @@ struct ChooseTopicView: View {
     @Binding var AllThemeidArray:[[String]]
     @Binding var Alreadyselection:[Int]
     
+    //タブの文字設定
     let list:[String] = ["みんなのお題で遊ぶ","お題を自分で作成"]
     var body: some View {
         let bounds = UIScreen.main.bounds
@@ -68,15 +71,19 @@ struct ChooseTopicView: View {
 
         
         
-
+        //本文
         ZStack{
+            //ローディング画面に入った場合の処理
             if Loading == true{
+                //ローディング画面の背景配置
                     Color(red:237/250,green:236/250,blue:222/250).edgesIgnoringSafeArea(.all)
                     Circle()
                         .frame(width: 250,height: 250)
                         .foregroundColor(.gray)
                         .opacity(0)
                     VStack{
+                        
+                        //回転する画像配置
                         Image("Loading")
                             .resizable()
                             .frame(width:200,height: 200)
@@ -94,63 +101,85 @@ struct ChooseTopicView: View {
                             .font(.system(size:20))
                     }
                     .navigationBarHidden(true)
+                //インターネットアクセスがない場合の処理。ネットワーク接続が不安定ですというポップ表示を出す。
                     .alert("ネットワーク接続が不安定です",isPresented: $noInternetaccess){
                         Button("再接続"){
-
+                            //再接続ボタンを押した場合のアクション
+                                //再びfiredatabaseからお題を読み込む
                                 model.getData(Theme:CategoryArray[selection],completion: {
+                                    //読み込めた場合の処理。読み込んでから三秒後に始まる。
                                     DispatchQueue.main.asyncAfter(deadline: .now()+3) {
                                         QuestionArray=[]
                                         ThemeArray1=[]
                                         ThemeArray2=[]
                                         ThemeidArray = []
+                                        
+                                        //各項目を変数に格納する
                                         for number in 0..<model.list.count {
                                             QuestionArray.append(model.list[number].question)
                                             ThemeArray1.append(model.list[number].name)
                                             ThemeArray2.append(model.list[number].notes)
                                             ThemeidArray.append(model.list[number].id)
-                                            
-                                            
-                                            
+                                        }
+                                        
+                                        //読み込んだお題を取っておくための配列に格納する
+                                        for number in 0..<model.list.count {
+                                            AlreadyThemeArray1[selection-1].append(model.list[number].name)
+                                            AlreadyThemeArray2[selection-1].append(model.list[number].notes)
+                                            AlreadyQuestionArray[selection-1].append(model.list[number].question)
+                                            AlreadyThemeidArray[selection-1].append(model.list[number].id)
+                                            AllThemeArray1[selection-1].append(model.list[number].name)
+                                            AllThemeArray2[selection-1].append(model.list[number].notes)
+                                            AllQuestionArray[selection-1].append(model.list[number].question)
+                                            AllThemeidArray[selection-1].append(model.list[number].id)
                                             
                                         }
-                                        if AlreadyThemeArray[selection-1].count>0 {
-                                            for number in 0..<AlreadyThemeArray[selection-1].count{
-                                                if let index = ThemeidArray.firstIndex(of: AlreadyThemeArray[selection-1][number]){
-                                                    ThemeArray1.remove(at: index)
-                                                    ThemeArray2.remove(at: index)
-                                                    QuestionArray.remove(at: index)
-                                                    ThemeidArray.remove(at:index)
-                                                }
-                                            }
-                                        }
+                                        //↓このif文機能してないから消す(ジャンル選択で毎回読み取りする場合は消さない）
+//                                        if AlreadyThemeArray[selection-1].count>0 {
+//                                            for number in 0..<AlreadyThemeArray[selection-1].count{
+//                                                if let index = ThemeidArray.firstIndex(of: AlreadyThemeArray[selection-1][number]){
+//                                                    ThemeArray1.remove(at: index)
+//                                                    ThemeArray2.remove(at: index)
+//                                                    QuestionArray.remove(at: index)
+//                                                    ThemeidArray.remove(at:index)
+//                                                }
+//                                            }
+//                                        }
+                                        
+                                        //出題するお題番号をランダムに決定
                                         Themenumber = Int.random(in: 0...ThemeArray1.count-1)
                                         print(QuestionArray)
                                         print(ThemeidArray)
+                                        //FourthViewへ遷移
                                         path.append("FourthView")
                                     }
+                                //お題を時間内に取得できなかった場合、accessが呼び出され、noInternetaccessがtrueになり、再びアラートが呼び出されループ
                                 },access: {noInternetaccess = true})
                             
                         }
                         Button("前の画面に戻る"){
                             
                             animate = false
+                            //ChooseTopicViewへ戻る
                             path.append("ChooseTopicView")
                             Loading = false
                             
                         }}
                 }
+            //これで決定ボタンを押す前の処理
             
             if Loading == false{
+                
                 VStack(spacing:0){
                     
-                    
+                    //タブ表示をTopTabViewから持ってくる
                     Divider()
                     TopTabView(list:list,selectedTab: $selectedTab).padding(.bottom,5)
                     TabView(selection:$selectedTab,
                             content: {
                         ZStack {
-                            // 背景色指定
                             
+                            //背景画像配置
                             if height/width < 2{
                                 Image("Background9_16")
                                     .resizable()
@@ -165,8 +194,7 @@ struct ChooseTopicView: View {
                                 
                             }
                             VStack(alignment: .center,spacing:15){
-//                                Text("ージャンルを選択ー").fontWeight(.regular).font(.system(size:25)).padding(.top,CGFloat(height)/10)
-                                
+                                //選択肢を配置。tagの後の番号がselectionに渡される。
                                 Picker(selection:$selection,label:Text("ジャンル選択1")){
                                     Text("-ジャンルを選択-").tag(0).font(.system(size:20))
                                     Text("恋愛").tag(1).font(.system(size:30)).fontWeight(.bold)
@@ -182,26 +210,30 @@ struct ChooseTopicView: View {
             
                                 // 「これで決定」ボタンの定義
                                 Button(action:{
+                                    //ローディング表示を始める
                                     Loading = true
+                                    
                                     if Alreadyselection.firstIndex(of: selection) == nil{
+                                        //初めてのジャンルを選択した場合の処理
                                         print("初")
                                         Alreadyselection.append(selection)
+                                        //firedatabaseからお題を読み込む
                                         model.getData(Theme:CategoryArray[selection],completion: {
+                                            //読み込めた場合の処理。読み込んでから三秒後に始まる。
                                             DispatchQueue.main.asyncAfter(deadline: .now()+3) {
                                                 QuestionArray=[]
                                                 ThemeArray1=[]
                                                 ThemeArray2=[]
                                                 ThemeidArray = []
+                                                
+                                                //各項目を変数に格納する
                                                 for number in 0..<model.list.count {
                                                     QuestionArray.append(model.list[number].question)
                                                     ThemeArray1.append(model.list[number].name)
                                                     ThemeArray2.append(model.list[number].notes)
                                                     ThemeidArray.append(model.list[number].id)
-                                                    
-                                                    
-                                                    
-                                                    
                                                 }
+                                                //読み込んだお題を取っておくための配列に格納する
                                                 for number in 0..<model.list.count {
                                                     AlreadyThemeArray1[selection-1].append(model.list[number].name)
                                                     AlreadyThemeArray2[selection-1].append(model.list[number].notes)
@@ -225,45 +257,51 @@ struct ChooseTopicView: View {
 //                                                        }
 //                                                    }
 //                                                }
+                                                
+                                                //出題するお題番号をランダムに決定
                                                 Themenumber = Int.random(in: 0...ThemeArray1.count-1)
                                                 print(QuestionArray)
                                                 print(ThemeidArray)
+                                                //FourthViewへ遷移
                                                 path.append("FourthView")
                                             }
+                                            //お題を時間内に取得できなかった場合、accessが呼び出され、noInternetaccessがtrueになり、再びアラートが呼び出されループ
                                         },access: {noInternetaccess = true})
                                         
                                     }
                                     
                                     else {
+                                        //二回目以降のジャンルを選択した場合の処理
                                         print("二回目")
                                         DispatchQueue.main.asyncAfter(deadline: .now()+3) {
-                                            ThemeidArray = AlreadyThemeidArray[selection-1]
+                                            //以前に回答済+報告されたお題番号を、ジャンル内で検出しRemovenumberArrayに格納
                                             for number in 0..<AlreadyThemeArray[selection-1].count{
-                                                if let index = ThemeidArray.firstIndex(of: AlreadyThemeArray[selection-1][number]){
+                                                if let index = AlreadyThemeidArray[selection-1].firstIndex(of: AlreadyThemeArray[selection-1][number]){
                                                     RemovenumberArray.append(index)
                                                     
                                                 }
                                             }
+                                            //正確にお題を除去できるようRemovenumberArrayを昇順に並び替える
                                             RemovenumberArray.sort{$0>$1}
                                             print(RemovenumberArray)
                                             
+                                            //回答済+報告済のお題を取り除く
                                             for number in 0..<RemovenumberArray.count{
                                                 
                                                     AlreadyThemeArray1[selection-1].remove(at: RemovenumberArray[number])
                                                     AlreadyThemeArray2[selection-1].remove(at: RemovenumberArray[number])
                                                     AlreadyQuestionArray[selection-1].remove(at: RemovenumberArray[number])
                                                     AlreadyThemeidArray[selection-1].remove(at: RemovenumberArray[number])
-                                                    
-                                                
-                                                
                                             }
                                             
+                                            //取り除かれたお題を出題用の配列に格納する
                                             ThemeArray1 = AlreadyThemeArray1[selection-1]
                                             ThemeArray2 = AlreadyThemeArray2[selection-1]
                                             QuestionArray = AlreadyQuestionArray[selection-1]
                                             ThemeidArray = AlreadyThemeidArray[selection-1]
                                             print(QuestionArray)
                                             print(ThemeidArray)
+                                            //出題するお題番号をランダムに決定
                                             Themenumber = Int.random(in: 0...ThemeArray1.count-1)
                                             path.append("FourthView")
                                         }
@@ -271,6 +309,7 @@ struct ChooseTopicView: View {
                                     
                                     
                                 }) {
+                                    //selectionが0つまり、ジャンルが選択されていないときは、ボタンがグレーかつ押せなくする
                                     if selection == 0{
                                         Image("DecideTheme_grey")
                                             .renderingMode(.original)
@@ -293,9 +332,13 @@ struct ChooseTopicView: View {
                         }.padding(.top,CGFloat(height)/7)
                         
                             .tag(0)
+                        //以上でみんなのお題で遊ぶの内容終了
+                        
+                        
+                        //↓ここからお題を自分で作成の内容
                         ZStack {
-                            // 背景色指定
                             
+                            // 背景画像配置
                             if height/width < 2{
                                 Image("Background9_16")
                                     .resizable()
@@ -309,8 +352,9 @@ struct ChooseTopicView: View {
                                     .edgesIgnoringSafeArea(.all)
                                 
                             }
+                            
                             VStack(alignment: .center,spacing:15) {
-//                                Text("ージャンルを選択ー").fontWeight(.semibold).font(.system(size:25)).padding(.top,CGFloat(height)/7)
+                                //選択肢を配置。tagの後の番号がselectionに渡される。selectionの変数がみんなのお題で遊ぶのViewと同じであるため、連動している。
                                 Picker(selection:$selection,label:Text("ジャンル選択1")){
                                     Text("-ジャンルを選択-").tag(0).font(.system(size:20))
                                     Text("恋愛").tag(1).font(.system(size:30)).fontWeight(.bold)
@@ -324,6 +368,8 @@ struct ChooseTopicView: View {
                                     
                                 }.pickerStyle((WheelPickerStyle())).frame(width:CGFloat(width)/1.3,height: CGFloat(height)/10).clipped().padding(.top,CGFloat(height)/7)
                                 
+                                
+                                //質問入力用のテキストボックス配置
                                 HStack(alignment: .center){
                                     Text("Q.")
                                         .font(.system(size:CGFloat(width)/10))
@@ -339,20 +385,15 @@ struct ChooseTopicView: View {
                                 }
                                 // お題入力用のテキストボックス追加
                                 HStack(alignment: .top,spacing:25) {
-                                    ZStack{
-                                        
-                                        
-                                        TextEditor(text:$Theme1)
+                                 
+                                    //お題1のテキストボックス
+                                    TextEditor(text:$Theme1)
                                             .frame(width:CGFloat(width)/2.5,height: CGFloat(height)/3)
                                             .padding(.leading, 30.0)
                                             .focused($isKeybordon)
                                             .multilineTextAlignment(.leading)
                                             .shadow(color:.primary.opacity(0.1),radius: 3,x:4,y:4)
-                                        
-                                        
-                                    }
-                                       
-                                    
+                                    //お題2のテキストボックス
                                     TextEditor(text:$Theme2)
                                         .frame(width:CGFloat(width)/2.5,height: CGFloat(height)/3)
                                         .padding(.trailing, 30.0)
@@ -361,12 +402,12 @@ struct ChooseTopicView: View {
                                         .shadow(color:.primary.opacity(0.1),radius: 3,x:4,y:4)
                                 }
                                 
+                                //確定ボタンの配置
                                 Button(action:{
-                                    
-                                    
                                     Decide = true
                                 }
                                 ) {
+                                    //ジャンルが選択されているかつ、すべてのテキストボックスに文字が入っている場合のみボタンを押せるようになっている。
                                     if (selection == 0 || Question == "" || Theme1 == "" || Theme2 == "") {
                                         Image("DecideGrey")
                                             .renderingMode(.original)
@@ -383,14 +424,16 @@ struct ChooseTopicView: View {
                                 }
                                 .disabled(selection == 0 || Question == "" || Theme1 == "" || Theme2 == "")
                                 .padding()
+                                
+                                //確定ボタンを押したら以下のアラートが表示される。
                                 .alert("作成したお題をオンラインで\n公開しますか？",isPresented: $Decide){
                                     Button("はい"){
-                                        share = true
+                                        //質問、お題1、お題2をfirebaseにアップロード
+                                        model.addData(Theme:CategoryArray[selection],question: Question,name: Theme1, notes: Theme2)
                                         path.append("OfflineView")
-                                            model.addData(Theme:CategoryArray[selection],question: Question,name: Theme1, notes: Theme2)
+                                            
                                     }
                                     Button("いいえ"){
-                                        share = true
                                         path.append("OfflineView")
                                     }
                                     Button("お題を修正"){}
@@ -403,21 +446,26 @@ struct ChooseTopicView: View {
                             
                         }
                         .tag(1)
+                        //以上でお題を自分で作成の内容終わり
                     })
+                    //タブビューにするために必要
                     .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                     
                 }
+                //ヘッダーの設定
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationTitle("出題方法を選択")
                 .edgesIgnoringSafeArea(.bottom )
             }
         }.navigationBarBackButtonHidden(true)
+        //左上に配置される名前登録に戻るボタンの配置
             .toolbar{
                 if Loading == false{
                     
                     ToolbarItem(placement: .navigationBarLeading){
                         Button(
                             action:{
+                                //SecondViewに戻る
                                 path=NavigationPath(["SecondView"])
                             }) {
                                 HStack{
@@ -441,7 +489,6 @@ struct ChooseTopicView_Previews: PreviewProvider {
                         memberArray2: .constant(["回答者の名前2"]),
                         memberAll: .constant(["回答者の名前全員"]),
                         ButtonCount: .constant(0),
-                        anonymousWhich: .constant(true),
                         anonymous: .constant(true),
                         path: .constant(NavigationPath("パス")),
                         ThemeArray1:.constant(["お題1"]),
@@ -459,7 +506,6 @@ struct ChooseTopicView_Previews: PreviewProvider {
                         noInternetaccess: .constant(true),
                         AlreadyThemeArray: .constant([["回答済のお題"]]),
                         ThemeidArray:.constant(["お題ID"]),
-                        ThemeUploadWhich:.constant(false),
                         Question: .constant("質問"),
                         Theme1:.constant("お題1"),
                         Theme2:.constant("お題2"),
