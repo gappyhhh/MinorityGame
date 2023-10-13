@@ -131,8 +131,15 @@ struct ResultView: View {
                         AlreadyThemeArray[selection-1].append(ThemeidArray[Themenumber])
                         for num in 0..<ReportidArray.count{
                             AlreadyThemeArray[selection-1].append(ReportidArray[num])
+                            AllReportidArray.append(ReportidArray[num])
                         }
+                        print(AllThemeidArray[selection-1].count,AlreadyThemeArray[selection-1].count)
+                        if AlreadyThemeArray[selection-1].count == AllThemeidArray[selection-1].count{
+                            AlreadyThemeArray[selection-1] = AllReportidArray
+                        }
+                        print(AllThemeidArray)
                         print(AlreadyThemeArray)
+                        
                         ReportidArray = []
                         selection = 0
                         path.append("ChooseTopicView")
@@ -151,11 +158,13 @@ struct ResultView: View {
                         ResultMemberArray1.removeAll()
                         ResultMemberArray2.removeAll()
                         AlreadyThemeArray[selection-1].append(ThemeidArray[Themenumber])
-                        print(AlreadyThemeArray)
+                        
                         for num in 0..<ReportidArray.count{
                             AlreadyThemeArray[selection-1].append(ReportidArray[num])
                             AllReportidArray.append(ReportidArray[num])
                         }
+                        print(AlreadyThemeArray)
+                        print(AllReportidArray)
                         for number in 0..<AlreadyThemeArray[selection-1].count{
                             if let index = ThemeidArray.firstIndex(of: AlreadyThemeArray[selection-1][number]){
                                 ThemeArray1.remove(at: index)

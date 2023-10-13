@@ -124,10 +124,7 @@ struct ChooseTopicView: View {
                                         
                                         //読み込んだお題を取っておくための配列に格納する
                                         for number in 0..<model.list.count {
-                                            AlreadyThemeArray1[selection-1].append(model.list[number].name)
-                                            AlreadyThemeArray2[selection-1].append(model.list[number].notes)
-                                            AlreadyQuestionArray[selection-1].append(model.list[number].question)
-                                            AlreadyThemeidArray[selection-1].append(model.list[number].id)
+                        
                                             AllThemeArray1[selection-1].append(model.list[number].name)
                                             AllThemeArray2[selection-1].append(model.list[number].notes)
                                             AllQuestionArray[selection-1].append(model.list[number].question)
@@ -235,10 +232,7 @@ struct ChooseTopicView: View {
                                                 }
                                                 //読み込んだお題を取っておくための配列に格納する
                                                 for number in 0..<model.list.count {
-                                                    AlreadyThemeArray1[selection-1].append(model.list[number].name)
-                                                    AlreadyThemeArray2[selection-1].append(model.list[number].notes)
-                                                    AlreadyQuestionArray[selection-1].append(model.list[number].question)
-                                                    AlreadyThemeidArray[selection-1].append(model.list[number].id)
+                                                    
                                                     AllThemeArray1[selection-1].append(model.list[number].name)
                                                     AllThemeArray2[selection-1].append(model.list[number].notes)
                                                     AllQuestionArray[selection-1].append(model.list[number].question)
@@ -276,7 +270,7 @@ struct ChooseTopicView: View {
                                         DispatchQueue.main.asyncAfter(deadline: .now()+3) {
                                             //以前に回答済+報告されたお題番号を、ジャンル内で検出しRemovenumberArrayに格納
                                             for number in 0..<AlreadyThemeArray[selection-1].count{
-                                                if let index = AlreadyThemeidArray[selection-1].firstIndex(of: AlreadyThemeArray[selection-1][number]){
+                                                if let index = AllThemeidArray[selection-1].firstIndex(of: AlreadyThemeArray[selection-1][number]){
                                                     RemovenumberArray.append(index)
                                                     
                                                 }
@@ -285,20 +279,20 @@ struct ChooseTopicView: View {
                                             RemovenumberArray.sort{$0>$1}
                                             print(RemovenumberArray)
                                             
+                                            ThemeArray1 = AllThemeArray1[selection-1]
+                                            ThemeArray2 = AllThemeArray2[selection-1]
+                                            QuestionArray = AllQuestionArray[selection-1]
+                                            ThemeidArray = AllThemeidArray[selection-1]
+                                            
                                             //回答済+報告済のお題を取り除く
                                             for number in 0..<RemovenumberArray.count{
                                                 
-                                                    AlreadyThemeArray1[selection-1].remove(at: RemovenumberArray[number])
-                                                    AlreadyThemeArray2[selection-1].remove(at: RemovenumberArray[number])
-                                                    AlreadyQuestionArray[selection-1].remove(at: RemovenumberArray[number])
-                                                    AlreadyThemeidArray[selection-1].remove(at: RemovenumberArray[number])
+                                                    ThemeArray1.remove(at: RemovenumberArray[number])
+                                                    ThemeArray2.remove(at: RemovenumberArray[number])
+                                                    QuestionArray.remove(at: RemovenumberArray[number])
+                                                    ThemeidArray.remove(at: RemovenumberArray[number])
                                             }
                                             
-                                            //取り除かれたお題を出題用の配列に格納する
-                                            ThemeArray1 = AlreadyThemeArray1[selection-1]
-                                            ThemeArray2 = AlreadyThemeArray2[selection-1]
-                                            QuestionArray = AlreadyQuestionArray[selection-1]
-                                            ThemeidArray = AlreadyThemeidArray[selection-1]
                                             print(QuestionArray)
                                             print(ThemeidArray)
                                             //出題するお題番号をランダムに決定
