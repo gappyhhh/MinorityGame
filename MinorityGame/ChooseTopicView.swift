@@ -193,15 +193,15 @@ struct ChooseTopicView: View {
                             VStack(alignment: .center,spacing:15){
                                 //選択肢を配置。tagの後の番号がselectionに渡される。
                                 Picker(selection:$selection,label:Text("ジャンル選択1")){
-                                    Text("-ジャンルを選択-").tag(0).font(.system(size:20))
-                                    Text("恋愛").tag(1).font(.system(size:30)).fontWeight(.bold)
-                                    Text("スポーツ").tag(2).font(.system(size:30)).fontWeight(.bold)
-                                    Text("仕事").tag(3).font(.system(size:30)).fontWeight(.bold)
-                                    Text("芸能").tag(4).font(.system(size:30)).fontWeight(.bold)
-                                    Text("学校").tag(5).font(.system(size:30)).fontWeight(.bold)
-                                    Text("美容").tag(6).font(.system(size:30)).fontWeight(.bold)
-                                    Text("生活").tag(7).font(.system(size:30)).fontWeight(.bold)
-                                    Text("その他").tag(8).font(.system(size:30)).fontWeight(.bold)
+                                    Text("-ジャンルを選択-").tag(0).font(.system(size:CGFloat(width)/20))
+                                    Text("恋愛").tag(1).font(.system(size:CGFloat(width)/15)).fontWeight(.bold)
+                                    Text("スポーツ").tag(2).font(.system(size:CGFloat(width)/15)).fontWeight(.bold)
+                                    Text("仕事").tag(3).font(.system(size:CGFloat(width)/15)).fontWeight(.bold)
+                                    Text("芸能").tag(4).font(.system(size:CGFloat(width)/15)).fontWeight(.bold)
+                                    Text("学校").tag(5).font(.system(size:CGFloat(width)/15)).fontWeight(.bold)
+                                    Text("美容").tag(6).font(.system(size:CGFloat(width)/15)).fontWeight(.bold)
+                                    Text("生活").tag(7).font(.system(size:CGFloat(width)/15)).fontWeight(.bold)
+                                    Text("その他").tag(8).font(.system(size:CGFloat(width)/15)).fontWeight(.bold)
                                     
                                 }.pickerStyle((WheelPickerStyle())).frame(width:CGFloat(width)/1.3).clipped().padding(.top,CGFloat(height)/10)
             
@@ -350,50 +350,86 @@ struct ChooseTopicView: View {
                             VStack(alignment: .center,spacing:15) {
                                 //選択肢を配置。tagの後の番号がselectionに渡される。selectionの変数がみんなのお題で遊ぶのViewと同じであるため、連動している。
                                 Picker(selection:$selection,label:Text("ジャンル選択1")){
-                                    Text("-ジャンルを選択-").tag(0).font(.system(size:20))
-                                    Text("恋愛").tag(1).font(.system(size:30)).fontWeight(.bold)
-                                    Text("スポーツ").tag(2).font(.system(size:30)).fontWeight(.bold)
-                                    Text("仕事").tag(3).font(.system(size:30)).fontWeight(.bold)
-                                    Text("芸能").tag(4).font(.system(size:30)).fontWeight(.bold)
-                                    Text("学校").tag(5).font(.system(size:30)).fontWeight(.bold)
-                                    Text("美容").tag(6).font(.system(size:30)).fontWeight(.bold)
-                                    Text("生活").tag(7).font(.system(size:30)).fontWeight(.bold)
-                                    Text("その他").tag(8).font(.system(size:30)).fontWeight(.bold)
+                                    Text("-ジャンルを選択-").tag(0).font(.system(size:CGFloat(width)/20))
+                                    Text("恋愛").tag(1).font(.system(size:CGFloat(width)/15)).fontWeight(.bold)
+                                    Text("スポーツ").tag(2).font(.system(size:CGFloat(width)/15)).fontWeight(.bold)
+                                    Text("仕事").tag(3).font(.system(size:CGFloat(width)/15)).fontWeight(.bold)
+                                    Text("芸能").tag(4).font(.system(size:CGFloat(width)/15)).fontWeight(.bold)
+                                    Text("学校").tag(5).font(.system(size:CGFloat(width)/15)).fontWeight(.bold)
+                                    Text("美容").tag(6).font(.system(size:CGFloat(width)/15)).fontWeight(.bold)
+                                    Text("生活").tag(7).font(.system(size:CGFloat(width)/15)).fontWeight(.bold)
+                                    Text("その他").tag(8).font(.system(size:CGFloat(width)/15)).fontWeight(.bold)
                                     
-                                }.pickerStyle((WheelPickerStyle())).frame(width:CGFloat(width)/1.3,height: CGFloat(height)/10).clipped().padding(.top,CGFloat(height)/7)
+                                }.pickerStyle((WheelPickerStyle())).frame(width:CGFloat(width)/1.3,height: CGFloat(height)/10).clipped().padding(.top,CGFloat(height)/8)
                                 
                                 
                                 //質問入力用のテキストボックス配置
                                 HStack(alignment: .center){
-                                    Text("Q.")
-                                        .font(.system(size:CGFloat(width)/10))
-                                        .shadow(color:.primary.opacity(0.3),radius: 3,x:4,y:4)
-                                    TextEditor(text:$Question)
-                                        .frame(width:CGFloat(width)/1.4,height: CGFloat(height)/15)
-                                        .focused($isKeybordon)
-                                        .multilineTextAlignment(.leading)
-                                        .padding(.trailing)
-                                        .shadow(color:.primary.opacity(0.3),radius: 3,x:4,y:4)
+//                                    Text("Q.")
+//                                        .font(.system(size:CGFloat(width)/10))
+//                                        .shadow(color:.primary.opacity(0.3),radius: 3,x:4,y:4)
+                                    ZStack{
+                                        TextEditor(text:$Question)
+                                            .frame(width:CGFloat(width)/1.4,height: CGFloat(height)/14)
+                                            .focused($isKeybordon)
+                                            .multilineTextAlignment(.leading)
+                                            
+                                            .shadow(color:.primary.opacity(0.3),radius: 3,x:4,y:4)
+                                            .font(.system(size:CGFloat(width)/25))
+                                        
+                                        if Question.isEmpty{
+                                            Text("質問を入力してください。")
+                                                .foregroundColor(Color(uiColor: .placeholderText))
+                                                .allowsHitTesting(false)
+                                                .padding(.bottom,CGFloat(height)/30)
+                                                .padding(.trailing,CGFloat(width)/4)
+                                                .font(.system(size:CGFloat(width)/25))
+                                        }
+                                    }
                                     
                                     
                                 }
                                 // お題入力用のテキストボックス追加
                                 HStack(alignment: .top,spacing:25) {
-                                 
-                                    //お題1のテキストボックス
-                                    TextEditor(text:$Theme1)
-                                            .frame(width:CGFloat(width)/2.5,height: CGFloat(height)/3)
+                                    ZStack{
+                                        //お題1のテキストボックス
+                                        TextEditor(text:$Theme1)
+                                            .frame(width:CGFloat(width)/2.3,height: CGFloat(height)/3)
                                             .padding(.leading, 30.0)
                                             .focused($isKeybordon)
                                             .multilineTextAlignment(.leading)
                                             .shadow(color:.primary.opacity(0.1),radius: 3,x:4,y:4)
+                                            .font(.system(size:CGFloat(width)/25))
+                                        
+                                        if Theme1.isEmpty{
+                                            Text("選択肢1を入力してください。")
+                                                .foregroundColor(Color(uiColor: .placeholderText))
+                                                .allowsHitTesting(false)
+                                                .padding(.bottom,CGFloat(height)/3.7)
+                                                .padding(.leading,CGFloat(width)/19)
+                                                .font(.system(size:CGFloat(width)/25))
+                                        }
+                                    }
                                     //お題2のテキストボックス
-                                    TextEditor(text:$Theme2)
-                                        .frame(width:CGFloat(width)/2.5,height: CGFloat(height)/3)
-                                        .padding(.trailing, 30.0)
-                                        .focused($isKeybordon)
-                                        .multilineTextAlignment(.leading)
-                                        .shadow(color:.primary.opacity(0.1),radius: 3,x:4,y:4)
+                                    ZStack{
+                                        TextEditor(text:$Theme2)
+                                            .frame(width:CGFloat(width)/2.3,height: CGFloat(height)/3)
+                                            .padding(.trailing, 30.0)
+                                            .focused($isKeybordon)
+                                            .multilineTextAlignment(.leading)
+                                            .shadow(color:.primary.opacity(0.1),radius: 3,x:4,y:4)
+                                            .font(.system(size:CGFloat(width)/25))
+                                        
+                                        if Theme2.isEmpty{
+                                            Text("選択肢2を入力してください。")
+                                                .foregroundColor(Color(uiColor: .placeholderText))
+                                                .allowsHitTesting(false)
+                                                .padding(.bottom,CGFloat(height)/3.7)
+                                                .padding(.trailing,CGFloat(width)/8.5)
+                                                .font(.system(size:CGFloat(width)/25))
+                                        }
+                                        
+                                    }
                                 }
                                 
                                 //確定ボタンの配置
@@ -418,6 +454,7 @@ struct ChooseTopicView: View {
                                 }
                                 .disabled(selection == 0 || Question == "" || Theme1 == "" || Theme2 == "")
                                 .padding()
+                                
                                 
                                 //確定ボタンを押したら以下のアラートが表示される。
                                 .alert("作成したお題をオンラインで\n公開しますか？",isPresented: $Decide){
@@ -500,9 +537,9 @@ struct ChooseTopicView_Previews: PreviewProvider {
                         noInternetaccess: .constant(true),
                         AlreadyThemeArray: .constant([["回答済のお題"]]),
                         ThemeidArray:.constant(["お題ID"]),
-                        Question: .constant("質問"),
-                        Theme1:.constant("お題1"),
-                        Theme2:.constant("お題2"),
+                        Question: .constant(""),
+                        Theme1:.constant(""),
+                        Theme2:.constant(""),
                         AlreadyThemeArray1: .constant([["お題1全部"]]),
                         AlreadyThemeArray2: .constant([["お題全部"]]),
                         AlreadyQuestionArray: .constant([["a"]]),

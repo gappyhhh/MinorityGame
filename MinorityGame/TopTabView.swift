@@ -42,7 +42,7 @@ struct TopTabView: View {
                                         .padding(.top,5)
                                 }
                                 Text(list[row])
-                                    .font(Font.system(size:18,weight: .semibold))
+                                    .font(Font.system(size:CGFloat(width)/25,weight: .semibold))
                                     .foregroundColor(Color.primary)
                             }
                         }
