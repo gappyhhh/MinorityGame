@@ -74,43 +74,45 @@ struct FourthView: View {
             
             VStack {
                 // 説明欄
-                if selection == 1{
-                    Image("LoveTheme")
-                        .resizable(capInsets: EdgeInsets())
-                        .scaledToFit()
-                        .frame(width:CGFloat(width)/1.4)
-            
-                }
-                
-                if selection == 2{
-                    Image("SportTheme")
-                        .resizable(capInsets: EdgeInsets())
-                        .scaledToFit()
-                        .frame(width:CGFloat(width)/1.4)
-                }
-                
-                if selection == 3{
-                    Image("WorkTheme")
-                        .resizable(capInsets: EdgeInsets())
-                        .scaledToFit()
-                        .frame(width:CGFloat(width)/1.4)
-                }
-                
-                if selection == 8{
-                    Image("Other")
-                        .resizable(capInsets: EdgeInsets())
-                        .scaledToFit()
-                        .frame(width:CGFloat(width)/1.4)
-                }
-                
+//                if selection == 1{
+//                    Image("LoveTheme")
+//                        .resizable(capInsets: EdgeInsets())
+//                        .scaledToFit()
+//                        .frame(width:CGFloat(width)/1.4)
+//            
+//                }
+//                
+//                if selection == 2{
+//                    Image("SportTheme")
+//                        .resizable(capInsets: EdgeInsets())
+//                        .scaledToFit()
+//                        .frame(width:CGFloat(width)/1.4)
+//                }
+//                
+//                if selection == 3{
+//                    Image("WorkTheme")
+//                        .resizable(capInsets: EdgeInsets())
+//                        .scaledToFit()
+//                        .frame(width:CGFloat(width)/1.4)
+//                }
+//                
+//                if selection == 8{
+//                    Image("Other")
+//                        .resizable(capInsets: EdgeInsets())
+//                        .scaledToFit()
+//                        .frame(width:CGFloat(width)/1.4)
+//                }
+
                     Text(memberAll[membernumber])
-                        .font(.system(size:CGFloat(width)/15))
-                        .padding(3)
-                        .frame(width:CGFloat(width)/2)
-                        .foregroundColor(Color.white)
+                    .padding(CGFloat(width)/45)
+                    .frame(width:CGFloat(width)/1.5)
+                    .font(.system(size:CGFloat(width)/14))
                         .background(Color.gray)
+                        .padding(.top,CGFloat(height)/60)
                         .lineLimit(1)
                         .minimumScaleFactor(0.1)
+                        .foregroundColor(Color.white)
+
                 HStack{
                     Text("Q.")
                         .font(.system(size:CGFloat(width)/15))
@@ -129,10 +131,11 @@ struct FourthView: View {
                             .overlay(
                                 Text(ThemeArray1[Themenumber])
                                     .foregroundColor(.black)
-                                    .font(.system(size:20))
+                                    .font(.system(size:CGFloat(width)/22))
                                 
-                            )
+                            ).multilineTextAlignment(.leading)
                     }).shadow(color:.primary.opacity(0.2),radius: 3,x:4,y:4)
+                        
                     Button(action:{RightTheme = true
                         LeftTheme = false
                     },label:{
@@ -142,8 +145,8 @@ struct FourthView: View {
                             .overlay(
                                 Text(ThemeArray2[Themenumber])
                                     .foregroundColor(.black)
-                                    .font(.system(size:20))
-                            )
+                                    .font(.system(size:CGFloat(width)/22))
+                            ).multilineTextAlignment(.leading)
                     }).shadow(color:.primary.opacity(0.2),radius: 3,x:4,y:4)
                 }
 
@@ -231,7 +234,6 @@ struct FourthView: View {
                         }
                     }
                 }
-                Spacer()
                 // 「OK」ボタンの定義
                 Button(action:{
                    
@@ -291,6 +293,8 @@ struct FourthView: View {
                             .frame(width:CGFloat(width)/1.5)
                     }
                 }.disabled(LeftTheme == false && RightTheme == false)
+                    .padding()
+                Spacer()
             }
             
         }.navigationBarBackButtonHidden(true)
@@ -301,7 +305,7 @@ struct FourthView_Previews: PreviewProvider {
     static var previews: some View {
         FourthView(memberArray: .constant(["回答者の名前1"]),
                    memberArray2: .constant(["回答者の名前2"]),
-                   memberAll: .constant(["回答者の名前全員"]),
+                   memberAll: .constant(["回答者"]),
                    ButtonCount: .constant(0),
                    anonymous: .constant(true),
                    path: .constant(NavigationPath("パス")),
