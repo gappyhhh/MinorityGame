@@ -213,7 +213,7 @@ struct ChooseTopicView: View {
                                     if Alreadyselection.firstIndex(of: selection) == nil{
                                         //初めてのジャンルを選択した場合の処理
                                         print("初")
-                                        Alreadyselection.append(selection)
+                                        
                                         //firedatabaseからお題を読み込む
                                         model.getData(Theme:CategoryArray[selection],completion: {
                                             //読み込めた場合の処理。読み込んでから三秒後に始まる。
@@ -258,6 +258,7 @@ struct ChooseTopicView: View {
                                                 print(ThemeidArray)
                                                 //FourthViewへ遷移
                                                 path.append("FourthView")
+                                                Alreadyselection.append(selection)
                                             }
                                             //お題を時間内に取得できなかった場合、accessが呼び出され、noInternetaccessがtrueになり、再びアラートが呼び出されループ
                                         },access: {noInternetaccess = true})

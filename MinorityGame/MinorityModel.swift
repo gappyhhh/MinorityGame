@@ -7,6 +7,8 @@
 
 import Foundation
 import Firebase
+import UIKit
+import BackgroundTasks
 
 class ViewModel: ObservableObject{
     
@@ -99,3 +101,5 @@ class ViewModel: ObservableObject{
         }
     }
 }
+
+

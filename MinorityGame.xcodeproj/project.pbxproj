@@ -138,8 +138,8 @@
 				7355167A2A979D7F0024CF48 /* MinorityTheme.swift */,
 				7355167C2A979E530024CF48 /* MinorityModel.swift */,
 				73A1BECA2AA62B84005672FF /* OfflineView.swift */,
-				73A90D722AA74E2800EC61B6 /* ResultView.swift */,
 				73A90D742AA8A57300EC61B6 /* OfflineResultView.swift */,
+				73A90D722AA74E2800EC61B6 /* ResultView.swift */,
 				73A3CF9A2AC43903000D1ADE /* TopTabView.swift */,
 				73A3CF9C2AC43CC3000D1ADE /* ChooseTopicView.swift */,
 				73B2A6622A9783F8002B3062 /* Assets.xcassets */,
@@ -610,6 +610,7 @@
 				DEVELOPMENT_TEAM = 4H57S6UH89;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MinorityGame/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -640,6 +641,7 @@
 				DEVELOPMENT_TEAM = 4H57S6UH89;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MinorityGame/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
