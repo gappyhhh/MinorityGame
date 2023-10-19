@@ -19,6 +19,7 @@ import Firebase
 //}
 @main
 struct MinorityGameApp: App {
+    @Environment(\.scenePhase) private var scenePhase
     
     init(){
         FirebaseApp.configure()
@@ -26,6 +27,21 @@ struct MinorityGameApp: App {
     var body: some Scene {
         WindowGroup {
                 ContentView()
+                .onChange(of:scenePhase) {
+                    phase in
+                    switch phase {
+                    case .active:
+                        print("active")
+                    case .inactive:
+                        print("inactive")
+                    case .background:
+                        print("background")
+                    @unknown default:
+                        print("@unknown")
+                    }
+                }
         }
     }
 }
+
+

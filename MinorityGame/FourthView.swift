@@ -102,16 +102,100 @@ struct FourthView: View {
 //                        .scaledToFit()
 //                        .frame(width:CGFloat(width)/1.4)
 //                }
-
+                
+                
+                if Firstanswer == true{
+                                        
+                    HStack{
+                        Spacer()
+                        Button(action:{
+                            showingDialog = true
+                        }) {
+                            Image("Bell")
+                                .renderingMode(.original)
+                                .resizable()
+                            
+                                .scaledToFit()
+                                .frame(width:CGFloat(width)/15)
+                                .padding(.trailing)
+                            
+                        }
+                        .sheet(isPresented:$showingModal){
+                            NavigationStack{
+                                VStack{
+                                    List(selection:$selectedValue){
+                                        ForEach(report,id: \.self){str in Text("\(str)")}
+                                    }.environment(\.editMode,.constant(.active))
+                                    Button("報告"){
+                                        
+                                        model.addReportData(question: selectedValue! ,name: CategoryArray[selection], notes: ThemeidArray[Themenumber])
+                                        ReportidArray.append(ThemeidArray[Themenumber])
+                                        print(ReportidArray)
+                                        FinishReport = true
+                                        
+                                        
+                                    }.alert("報告が完了しました",isPresented: $FinishReport){
+                                        Button("OK"){
+                                            showingModal = false
+                                            if Themenumber == QuestionArray.count-1{
+                                                Themenumber = -1
+                                            }
+                                            Themenumber = Themenumber+1
+                                            
+                                        }
+                                    }
+                                    .font(.system(size:20))
+                                    .padding(1)
+                                    .foregroundColor(.red)
+                                    
+                                    
+                                }
+                                .navigationBarTitleDisplayMode(.inline)
+                                .navigationTitle("報告理由を選択")
+                                .toolbar{
+                                    Button("閉じる", role:.cancel){
+                                        showingModal.toggle()
+                                    }
+                                }
+                            }.presentationDetents([.medium,.large],selection: $presentationDetent)
+                            
+                        }
+                        
+                        
+                        .confirmationDialog("お題の内容が不適切な場合は報告してください。", isPresented: $showingDialog, titleVisibility:.visible){
+                            Button("報告する",role:.destructive){
+                                showingDialog = false
+                                showingModal=true
+                                selectedValue = nil
+                            }
+                            Button("キャンセル",role:.cancel){
+                            }
+                        }
+                    }
+                    
+                    
+                }
+                HStack{
+                    Image("Person")
+                        .resizable(capInsets: EdgeInsets())
+                        .scaledToFit()
+                        .frame(height:CGFloat(height)/20)
+                        .padding(.top,CGFloat(height)/40)
+                    
+                        
+                    
+                        
+                    
                     Text(memberAll[membernumber])
-                    .padding(CGFloat(width)/45)
-                    .frame(width:CGFloat(width)/1.5)
-                    .font(.system(size:CGFloat(width)/14))
-                        .background(Color.gray)
+                        .padding(CGFloat(width)/45)
+//                        .frame(width:CGFloat(width)/1.5)
+                        .font(.system(size:CGFloat(width)/14))
+//                        .background(Color(red:234/255,green:234/255,blue:234/255))
                         .padding(.top,CGFloat(height)/60)
                         .lineLimit(1)
                         .minimumScaleFactor(0.1)
-                        .foregroundColor(Color.white)
+                        .foregroundColor(Color.black)
+                }.padding(.trailing,CGFloat(width)/20)
 
                 HStack{
                     Text("Q.")
@@ -151,89 +235,74 @@ struct FourthView: View {
                 }
 
                 
-                if Firstanswer == true{
-                    
-                    Button(action:{
-                        if Themenumber == QuestionArray.count-1{
-                            Themenumber = -1
-                        }
-                            Themenumber = Themenumber + 1
-                        LeftTheme = false
-                        RightTheme = false
-                    }) {
-                        Image("SkipButton")
-                            .renderingMode(.original)
-                            .resizable()
-                            
-                            .scaledToFit()
-                            .frame(width:CGFloat(width)/1.5)
-                            .padding(.trailing)
-                            .padding(.top)
-                    }
-                    
-                    Button(action:{
-                        showingDialog = true
-                    }) {
-                        Image("ReportButton")
-                            .renderingMode(.original)
-                            .resizable()
-                            
-                            .scaledToFit()
-                            .frame(width:CGFloat(width)/2)
-                            
-                    }
-                    .sheet(isPresented:$showingModal){
-                        NavigationStack{
-                            VStack{
-                                List(selection:$selectedValue){
-                                    ForEach(report,id: \.self){str in Text("\(str)")}
-                                }.environment(\.editMode,.constant(.active))
-                                Button("報告"){
-                                    
-                                    model.addReportData(question: selectedValue! ,name: CategoryArray[selection], notes: ThemeidArray[Themenumber])
-                                    ReportidArray.append(ThemeidArray[Themenumber])
-                                    print(ReportidArray)
-                                    FinishReport = true
-                                    
-                                   
-                                }.alert("報告が完了しました",isPresented: $FinishReport){
-                                    Button("OK"){
-                                        showingModal = false
-                                        if Themenumber == QuestionArray.count-1{
-                                            Themenumber = -1
-                                        }
-                                        Themenumber = Themenumber+1
-                                        
-                                    }
-                                }
-                                .font(.system(size:20))
-                                .padding(1)
-                                .foregroundColor(.red)
-                                
-                                    
-                            }
-                            .navigationBarTitleDisplayMode(.inline)
-                            .navigationTitle("報告理由を選択")
-                            .toolbar{
-                                Button("閉じる", role:.cancel){
-                                    showingModal.toggle()
-                                }
-                            }
-                        }.presentationDetents([.medium,.large],selection: $presentationDetent)
-                        
-                    }
-                    
-                    
-                    .confirmationDialog("お題の内容が不適切な場合は報告してください。", isPresented: $showingDialog, titleVisibility:.visible){
-                        Button("報告する",role:.destructive){
-                            showingDialog = false
-                            showingModal=true
-                            selectedValue = nil
-                        }
-                        Button("キャンセル",role:.cancel){
-                        }
-                    }
-                }
+//                if Firstanswer == true{
+//
+//
+//                    Button(action:{
+//                        showingDialog = true
+//                    }) {
+//                        Image("Bell")
+//                            .renderingMode(.original)
+//                            .resizable()
+//
+//                            .scaledToFit()
+//                            .frame(width:CGFloat(width)/15)
+//
+//                    }
+//                    .sheet(isPresented:$showingModal){
+//                        NavigationStack{
+//                            VStack{
+//                                List(selection:$selectedValue){
+//                                    ForEach(report,id: \.self){str in Text("\(str)")}
+//                                }.environment(\.editMode,.constant(.active))
+//                                Button("報告"){
+//
+//                                    model.addReportData(question: selectedValue! ,name: CategoryArray[selection], notes: ThemeidArray[Themenumber])
+//                                    ReportidArray.append(ThemeidArray[Themenumber])
+//                                    print(ReportidArray)
+//                                    FinishReport = true
+//
+//
+//                                }.alert("報告が完了しました",isPresented: $FinishReport){
+//                                    Button("OK"){
+//                                        showingModal = false
+//                                        if Themenumber == QuestionArray.count-1{
+//                                            Themenumber = -1
+//                                        }
+//                                        Themenumber = Themenumber+1
+//
+//                                    }
+//                                }
+//                                .font(.system(size:20))
+//                                .padding(1)
+//                                .foregroundColor(.red)
+//
+//
+//                            }
+//                            .navigationBarTitleDisplayMode(.inline)
+//                            .navigationTitle("報告理由を選択")
+//                            .toolbar{
+//                                Button("閉じる", role:.cancel){
+//                                    showingModal.toggle()
+//                                }
+//                            }
+//                        }.presentationDetents([.medium,.large],selection: $presentationDetent)
+//
+//                    }
+//
+//
+//                    .confirmationDialog("お題の内容が不適切な場合は報告してください。", isPresented: $showingDialog, titleVisibility:.visible){
+//                        Button("報告する",role:.destructive){
+//                            showingDialog = false
+//                            showingModal=true
+//                            selectedValue = nil
+//                        }
+//                        Button("キャンセル",role:.cancel){
+//                        }
+//                    }
+//
+//
+//                }
                 // 「OK」ボタンの定義
                 Button(action:{
                    
@@ -293,7 +362,26 @@ struct FourthView: View {
                             .frame(width:CGFloat(width)/1.5)
                     }
                 }.disabled(LeftTheme == false && RightTheme == false)
-                    .padding()
+                    
+                
+                Button(action:{
+                    if Themenumber == QuestionArray.count-1{
+                        Themenumber = -1
+                    }
+                        Themenumber = Themenumber + 1
+                    LeftTheme = false
+                    RightTheme = false
+                }) {
+                    Image("SkipButton")
+                        .renderingMode(.original)
+                        .resizable()
+                        
+                        .scaledToFit()
+                        .frame(width:CGFloat(width)/1.5)
+                        .padding(.trailing)
+                        .padding(.top)
+
+                }
                 Spacer()
             }
             

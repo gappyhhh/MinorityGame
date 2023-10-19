@@ -106,8 +106,8 @@ struct OfflineResultView: View {
                     
                         
                 }.padding(.bottom)
-                Text("選んだ理由について話し合ってみよう！")
-                    .font(.system(size:CGFloat(width)/22))
+//                Text("選んだ理由について話し合ってみよう！")
+//                    .font(.system(size:CGFloat(width)/22))
                 // 次の問題へボタンの定義
                 Button(action:{
                     ResultMemberArray1.removeAll()

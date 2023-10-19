@@ -14,7 +14,8 @@ import UIKit
 
 
 struct ContentView: View {
-    @State var isPresented:Bool = false
+    
+    
     @State private var path = NavigationPath()
     
     //--
@@ -89,6 +90,7 @@ struct ContentView: View {
                         .scaledToFit()
                         .frame(width:CGFloat(width)/1.1,height:CGFloat(height)/2)
                         .padding()
+                        
                     //PLAYボタン配置
                     Button(action:{path.append("SecondView")}) {
                         Image("PLAY")
@@ -235,6 +237,7 @@ struct ContentView: View {
             }
         }
     }
+        
 }
            
 struct ContentView_Previews: PreviewProvider {

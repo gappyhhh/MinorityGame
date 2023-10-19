@@ -63,6 +63,14 @@ struct ResultView: View {
                     .scaledToFit()
                     .frame(width:CGFloat(width)/1.5)
                 
+                HStack(alignment: .bottom,spacing:20){
+                    Text("名前を表示する：")
+                    Toggle("",isOn:$anonymous).labelsHidden()
+                        .onAppear {
+                            //初期値を代入
+                            anonymous = false
+                        }
+                }
                 
                 HStack{
                     Text("Q.")
@@ -83,7 +91,7 @@ struct ResultView: View {
                             .foregroundColor(Color.black)
                             .background(ONlineResultShow_red ? .white:.red)
                             .font(.system(size:CGFloat(height)/45))
-//                        if anonymous == false {
+                        if anonymous == true {
                             ForEach(0..<ResultMemberArray1.count, id:\.self ) {
                                 index in Text(ResultMemberArray1[index])
                                     .padding(4)
@@ -93,7 +101,17 @@ struct ResultView: View {
                                     .lineLimit(1)
                                     .minimumScaleFactor(0.1)
                             }
-//                        }
+                        } else {
+                            ForEach(0..<ResultMemberArray1.count, id:\.self ) {
+                                index in Text(" ")
+                                    .padding(4)
+                                    .frame(width:CGFloat(width)/2.4).font(.system(size:CGFloat(height)/42))
+                                    .background(Color.gray)
+                                    .foregroundColor(Color.white)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.1)
+                            }
+                        }
                     }
                     VStack{
                         //                        Text(String(ResultCount2))
@@ -103,7 +121,7 @@ struct ResultView: View {
                             .foregroundColor(Color.black)
                             .background(ONlineResultShow_white ? .white:.red)
                             .font(.system(size:CGFloat(height)/45))
-//                        if anonymous == false {
+                        if anonymous == true {
                             ForEach(0..<ResultMemberArray2.count, id:\.self ) {
                                 index in Text(ResultMemberArray2[index])
                                     .padding(4)
@@ -113,13 +131,23 @@ struct ResultView: View {
                                     .lineLimit(1)
                                     .minimumScaleFactor(0.1)
                             }
-//                        }
+                        } else {
+                            ForEach(0..<ResultMemberArray2.count, id:\.self ) {
+                                index in Text(" ")
+                                    .padding(4)
+                                    .frame(width:CGFloat(width)/2.4).font(.system(size:CGFloat(height)/42))
+                                    .background(Color.gray)
+                                    .foregroundColor(Color.white)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.1)
+                            }
+                        }
                     }
                     
                 }.padding(.bottom)
                 
-                Text("選んだ理由について話し合ってみよう！")
-                    .font(.system(size:CGFloat(width)/22))
+//                Text("選んだ理由について話し合ってみよう！")
+//                    .font(.system(size:CGFloat(width)/22))
                 
                 
                 HStack(alignment: .center,spacing:0){
