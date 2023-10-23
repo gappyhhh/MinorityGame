@@ -15,7 +15,11 @@ import UIKit
 
 struct ContentView: View {
     
-    
+    @Environment(\.scenePhase) private var scenePhase
+    @EnvironmentObject var alreadyselection : AlreadySelection
+    @State var inactivetime = 0
+    @State var activetime = 0
+    @State var timeout = false
     @State private var path = NavigationPath()
     
     //--
@@ -214,7 +218,8 @@ struct ContentView: View {
                                 AllThemeArray2: $AllThemeArray2,
                                 AllQuestionArray:$AllQuestionArray,
                                 AllThemeidArray: $AllThemeidArray,
-                                Alreadyselection:$Alreadyselection
+                                Alreadyselection:$Alreadyselection,
+                                AllreportidArray: $AllReportidArray
                             )
                             
                         default:
@@ -236,12 +241,32 @@ struct ContentView: View {
                 }
             }
         }
+        .onChange(of:scenePhase) {
+            phase in
+            switch phase {
+            case .active:
+                activetime = 525600*(Calendar.current.component(.year, from:Date()))+43800*(Calendar.current.component(.month, from:Date()))+1440*(Calendar.current.component(.day, from:Date()))+60*(Calendar.current.component(.month, from:Date()))+(Calendar.current.component(.minute, from:Date()))
+                print(activetime)
+                print(activetime-inactivetime)
+                        if activetime-inactivetime > 1 {
+                            alreadyselection.AlreadySelectionArray.removeAll()
+                        }
+                print(alreadyselection.AlreadySelectionArray)
+            case .inactive:
+                print("inactive")
+            case .background:
+                inactivetime = 525600*(Calendar.current.component(.year, from:Date()))+43800*(Calendar.current.component(.month, from:Date()))+1440*(Calendar.current.component(.day, from:Date()))+60*(Calendar.current.component(.month, from:Date()))+(Calendar.current.component(.minute, from:Date()))
+                print(inactivetime)
+            @unknown default:
+                print("@unknown")
+            }
+        }
     }
         
 }
            
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView().environmentObject(AlreadySelection())
     }
 }

@@ -27,7 +27,10 @@ struct ChooseTopicView: View {
     @State var Decide : Bool = false
         //アラート（アップロードOKか）表示の判定
     @State var RemovenumberArray:[Int] = []
-        ////回答済+報告済のお題番号を格納
+        //回答済+報告済のお題番号を格納
+    @State var FirstRemovenumberArray:[Int] = []
+        //報告済のお題番号を格納（時間経過でお題が更新された時に適用）
+    
     @Binding var memberArray:[String]
     @Binding var memberArray2:[String]
     @Binding var memberAll:[String]
@@ -61,6 +64,9 @@ struct ChooseTopicView: View {
     @Binding var AllQuestionArray:[[String]]
     @Binding var AllThemeidArray:[[String]]
     @Binding var Alreadyselection:[Int]
+    @Binding var AllreportidArray:[String]
+    @EnvironmentObject var alreadyselection:AlreadySelection
+    
     
     //タブの文字設定
     let list:[String] = ["みんなのお題で遊ぶ","お題を自分で作成"]
@@ -132,16 +138,26 @@ struct ChooseTopicView: View {
                                             
                                         }
                                         //↓このif文機能してないから消す(ジャンル選択で毎回読み取りする場合は消さない）
-//                                        if AlreadyThemeArray[selection-1].count>0 {
-//                                            for number in 0..<AlreadyThemeArray[selection-1].count{
-//                                                if let index = ThemeidArray.firstIndex(of: AlreadyThemeArray[selection-1][number]){
+                                        if AllreportidArray.count>0 {
+                                            for number in 0..<AllreportidArray.count{
+                                                if let index = ThemeidArray.firstIndex(of: AllreportidArray[number]){
+                                                    FirstRemovenumberArray.append(index)
 //                                                    ThemeArray1.remove(at: index)
 //                                                    ThemeArray2.remove(at: index)
 //                                                    QuestionArray.remove(at: index)
 //                                                    ThemeidArray.remove(at:index)
-//                                                }
-//                                            }
-//                                        }
+                                                }
+                                            }
+                                            
+                                            FirstRemovenumberArray.sort{$0>$1}
+                                            
+                                            for number in 0..<FirstRemovenumberArray.count{
+                                                ThemeArray1.remove(at:FirstRemovenumberArray[number])
+                                                ThemeArray2.remove(at:FirstRemovenumberArray[number])
+                                                QuestionArray.remove(at:FirstRemovenumberArray[number])
+                                                ThemeidArray.remove(at:FirstRemovenumberArray[number])
+                                            }
+                                        }
                                         
                                         //出題するお題番号をランダムに決定
                                         Themenumber = Int.random(in: 0...ThemeArray1.count-1)
@@ -239,18 +255,30 @@ struct ChooseTopicView: View {
                                                     AllThemeidArray[selection-1].append(model.list[number].id)
                                                     
                                                 }
-                                                //↓このif文機能してないから消す(ジャンル選択で毎回読み取りする場合は消さない）
-//                                                if AlreadyThemeArray[selection-1].count>0 {
-//                                                    for number in 0..<AlreadyThemeArray[selection-1].count{
-//                                                        if let index = ThemeidArray.firstIndex(of: AlreadyThemeArray[selection-1][number]){
+                                                
+                                                //アプリがバックグラウンドにある状態で10分以上経つ+その前に報告されたお題がある場合、以下が実行される
+                                                //読み取ったお題から報告されたお題を取り除く
+                                                if AllreportidArray.count>0 {
+                                                    for number in 0..<AllreportidArray.count{
+                                                        if let index = ThemeidArray.firstIndex(of: AllreportidArray[number]){
+                                                            FirstRemovenumberArray.append(index)
 //                                                            ThemeArray1.remove(at: index)
 //                                                            ThemeArray2.remove(at: index)
 //                                                            QuestionArray.remove(at: index)
 //                                                            ThemeidArray.remove(at:index)
-//                                                            
-//                                                        }
-//                                                    }
-//                                                }
+                                                            
+                                                        }
+                                                    }
+                                                    
+                                                    FirstRemovenumberArray.sort{$0>$1}
+                                                    
+                                                    for number in 0..<FirstRemovenumberArray.count{
+                                                        ThemeArray1.remove(at:FirstRemovenumberArray[number])
+                                                        ThemeArray2.remove(at:FirstRemovenumberArray[number])
+                                                        QuestionArray.remove(at:FirstRemovenumberArray[number])
+                                                        ThemeidArray.remove(at:FirstRemovenumberArray[number])
+                                                    }
+                                                }
                                                 
                                                 //出題するお題番号をランダムに決定
                                                 Themenumber = Int.random(in: 0...ThemeArray1.count-1)
@@ -258,7 +286,9 @@ struct ChooseTopicView: View {
                                                 print(ThemeidArray)
                                                 //FourthViewへ遷移
                                                 path.append("FourthView")
-                                                Alreadyselection.append(selection)
+                                                alreadyselection.AlreadySelectionArray.append(selection)
+                                                print(alreadyselection.AlreadySelectionArray)
+                                                
                                             }
                                             //お題を時間内に取得できなかった場合、accessが呼び出され、noInternetaccessがtrueになり、再びアラートが呼び出されループ
                                         },access: {noInternetaccess = true})
@@ -278,7 +308,6 @@ struct ChooseTopicView: View {
                                             }
                                             //正確にお題を除去できるようRemovenumberArrayを昇順に並び替える
                                             RemovenumberArray.sort{$0>$1}
-                                            print(RemovenumberArray)
                                             
                                             ThemeArray1 = AllThemeArray1[selection-1]
                                             ThemeArray2 = AllThemeArray2[selection-1]
@@ -549,7 +578,8 @@ struct ChooseTopicView_Previews: PreviewProvider {
                         AllThemeArray2: .constant([["お題全部"]]),
                         AllQuestionArray: .constant([["質問全部"]]),
                         AllThemeidArray: .constant([["ID全部"]]),
-                        Alreadyselection: .constant([0])
+                        Alreadyselection: .constant([0]),
+                        AllreportidArray: .constant(["報告済のお題全部"])
                         )
     }
 }

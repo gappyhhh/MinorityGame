@@ -52,35 +52,57 @@ struct OfflineView: View {
             
             VStack {
                 // 説明欄
-                if selection == 1{
-                    Image("LoveTheme")
+//                if selection == 1{
+//                    Image("LoveTheme")
+//                        .resizable(capInsets: EdgeInsets())
+//                        .scaledToFit()
+//                        .frame(width:CGFloat(width)/1.4)
+//                }
+//
+//                if selection == 2{
+//                    Image("SportTheme")
+//                        .resizable(capInsets: EdgeInsets())
+//                        .scaledToFit()
+//                        .frame(width:CGFloat(width)/1.4)
+//                }
+//
+//                if selection == 3{
+//                    Image("WorkTheme")
+//                        .resizable(capInsets: EdgeInsets())
+//                        .scaledToFit()
+//                        .frame(width:CGFloat(width)/1.4)
+//                }
+                
+//                    Text(memberAll[membernumber])
+//                        .font(.system(size:CGFloat(width)/15))
+//                        .frame(width:CGFloat(width)/2)
+//                        .padding(3)
+//                        .foregroundColor(Color.white)
+//                        .background(Color.gray)
+//                        .lineLimit(1)
+//                        .minimumScaleFactor(0.1)
+                
+                HStack{
+                    Image("Person")
                         .resizable(capInsets: EdgeInsets())
                         .scaledToFit()
-                        .frame(width:CGFloat(width)/1.4)
-                }
-                
-                if selection == 2{
-                    Image("SportTheme")
-                        .resizable(capInsets: EdgeInsets())
-                        .scaledToFit()
-                        .frame(width:CGFloat(width)/1.4)
-                }
-                
-                if selection == 3{
-                    Image("WorkTheme")
-                        .resizable(capInsets: EdgeInsets())
-                        .scaledToFit()
-                        .frame(width:CGFloat(width)/1.4)
-                }
-                
+                        .frame(height:CGFloat(height)/18)
+                        .padding(.top,CGFloat(height)/40)
+                    
+                        
+                    
+                        
+                    
                     Text(memberAll[membernumber])
-                        .font(.system(size:CGFloat(width)/15))
-                        .frame(width:CGFloat(width)/2)
-                        .padding(3)
-                        .foregroundColor(Color.white)
-                        .background(Color.gray)
+                        .padding(CGFloat(width)/45)
+//                        .frame(width:CGFloat(width)/1.5)
+                        .font(.system(size:CGFloat(width)/14))
+//                        .background(Color(red:234/255,green:234/255,blue:234/255))
+                        .padding(.top,CGFloat(height)/60)
                         .lineLimit(1)
                         .minimumScaleFactor(0.1)
+                        .foregroundColor(Color.black)
+                }.padding(.trailing,CGFloat(width)/20)
                 HStack{
                     Text("Q.")
                         .font(.system(size:CGFloat(width)/15))
@@ -119,7 +141,7 @@ struct OfflineView: View {
                             )
                     }).shadow(color:.primary.opacity(0.2),radius: 3,x:4,y:4)
                 }
-                Spacer()
+//                Spacer()
 
                 // 「OK」ボタンの定義
                 Button(action:{
@@ -169,6 +191,7 @@ struct OfflineView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width:CGFloat(width)/1.5)
+                            .padding(.top)
                     }
                     if LeftTheme || RightTheme == true{
                         Image("OKButton")
@@ -176,6 +199,7 @@ struct OfflineView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width:CGFloat(width)/1.5)
+                            .padding(.top)
                     }
                 }.disabled(LeftTheme == false && RightTheme == false )
                 Spacer()

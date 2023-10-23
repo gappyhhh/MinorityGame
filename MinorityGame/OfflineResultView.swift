@@ -120,7 +120,7 @@ struct OfflineResultView: View {
                         .renderingMode(.original)
                         .resizable()
                         .scaledToFit()
-                        .frame(width:CGFloat(width)/1.4)
+                        .frame(width:CGFloat(width)/2)
                 }.padding(.bottom, CGFloat(width)/20)
                 }
                 }.navigationBarBackButtonHidden(true)

@@ -64,7 +64,7 @@ class ViewModel: ObservableObject{
                         return MinorityTheme(id: d.documentID,
                                              question:d["Question"] as? String ?? "",
                                              name:d["Theme2"] as? String ?? "",
-                                             notes:d["Theme1"] as? String ?? "")
+                                             notes:d["Theme1"] as? String ?? "",)
                     }
                     if self.Internet == true{
                         timer.invalidate()

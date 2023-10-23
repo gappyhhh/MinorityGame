@@ -104,10 +104,14 @@ struct FourthView: View {
 //                }
                 
                 
-                if Firstanswer == true{
+//                if Firstanswer == true{
                                         
                     HStack{
-                        Spacer()
+                        if Firstanswer == false{
+                            Spacer().frame(height:CGFloat(width)/14.5)
+                        }
+                        if Firstanswer == true{
+                            Spacer()
                         Button(action:{
                             showingDialog = true
                         }) {
@@ -141,6 +145,8 @@ struct FourthView: View {
                                                 Themenumber = -1
                                             }
                                             Themenumber = Themenumber+1
+                                            LeftTheme = false
+                                            RightTheme = false
                                             
                                         }
                                     }
@@ -172,14 +178,15 @@ struct FourthView: View {
                             }
                         }
                     }
+                    }
                     
                     
-                }
+//                }
                 HStack{
                     Image("Person")
                         .resizable(capInsets: EdgeInsets())
                         .scaledToFit()
-                        .frame(height:CGFloat(height)/20)
+                        .frame(height:CGFloat(height)/18)
                         .padding(.top,CGFloat(height)/40)
                     
                         
@@ -204,7 +211,7 @@ struct FourthView: View {
                         .font(.system(size:CGFloat(width)/15))
                         .lineLimit(1)
                         .minimumScaleFactor(0.1)
-                }.padding()
+                }.padding(3)
                 HStack(alignment: .top,spacing:25){
                     Button(action:{LeftTheme = true
                         RightTheme = false
@@ -233,76 +240,6 @@ struct FourthView: View {
                             ).multilineTextAlignment(.leading)
                     }).shadow(color:.primary.opacity(0.2),radius: 3,x:4,y:4)
                 }
-
-                
-//                if Firstanswer == true{
-//
-//
-//                    Button(action:{
-//                        showingDialog = true
-//                    }) {
-//                        Image("Bell")
-//                            .renderingMode(.original)
-//                            .resizable()
-//
-//                            .scaledToFit()
-//                            .frame(width:CGFloat(width)/15)
-//
-//                    }
-//                    .sheet(isPresented:$showingModal){
-//                        NavigationStack{
-//                            VStack{
-//                                List(selection:$selectedValue){
-//                                    ForEach(report,id: \.self){str in Text("\(str)")}
-//                                }.environment(\.editMode,.constant(.active))
-//                                Button("報告"){
-//
-//                                    model.addReportData(question: selectedValue! ,name: CategoryArray[selection], notes: ThemeidArray[Themenumber])
-//                                    ReportidArray.append(ThemeidArray[Themenumber])
-//                                    print(ReportidArray)
-//                                    FinishReport = true
-//
-//
-//                                }.alert("報告が完了しました",isPresented: $FinishReport){
-//                                    Button("OK"){
-//                                        showingModal = false
-//                                        if Themenumber == QuestionArray.count-1{
-//                                            Themenumber = -1
-//                                        }
-//                                        Themenumber = Themenumber+1
-//
-//                                    }
-//                                }
-//                                .font(.system(size:20))
-//                                .padding(1)
-//                                .foregroundColor(.red)
-//
-//
-//                            }
-//                            .navigationBarTitleDisplayMode(.inline)
-//                            .navigationTitle("報告理由を選択")
-//                            .toolbar{
-//                                Button("閉じる", role:.cancel){
-//                                    showingModal.toggle()
-//                                }
-//                            }
-//                        }.presentationDetents([.medium,.large],selection: $presentationDetent)
-//
-//                    }
-//
-//
-//                    .confirmationDialog("お題の内容が不適切な場合は報告してください。", isPresented: $showingDialog, titleVisibility:.visible){
-//                        Button("報告する",role:.destructive){
-//                            showingDialog = false
-//                            showingModal=true
-//                            selectedValue = nil
-//                        }
-//                        Button("キャンセル",role:.cancel){
-//                        }
-//                    }
-//
-//
-//                }
                 // 「OK」ボタンの定義
                 Button(action:{
                    
@@ -353,6 +290,7 @@ struct FourthView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width:CGFloat(width)/1.5)
+                            .padding(.top)
                     }
                     if LeftTheme || RightTheme == true{
                         Image("OKButton")
@@ -360,27 +298,28 @@ struct FourthView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width:CGFloat(width)/1.5)
+                            .padding(.top)
                     }
                 }.disabled(LeftTheme == false && RightTheme == false)
                     
-                
-                Button(action:{
-                    if Themenumber == QuestionArray.count-1{
-                        Themenumber = -1
-                    }
+                if Firstanswer == true{
+                    Button(action:{
+                        if Themenumber == QuestionArray.count-1{
+                            Themenumber = -1
+                        }
                         Themenumber = Themenumber + 1
-                    LeftTheme = false
-                    RightTheme = false
-                }) {
-                    Image("SkipButton")
-                        .renderingMode(.original)
-                        .resizable()
+                        LeftTheme = false
+                        RightTheme = false
+                    }) {
+                        Image("SkipButton")
+                            .renderingMode(.original)
+                            .resizable()
                         
-                        .scaledToFit()
-                        .frame(width:CGFloat(width)/1.5)
-                        .padding(.trailing)
-                        .padding(.top)
-
+                            .scaledToFit()
+                            .frame(width:CGFloat(width)/1.8)
+                            .padding(.trailing)
+                        
+                    }
                 }
                 Spacer()
             }
