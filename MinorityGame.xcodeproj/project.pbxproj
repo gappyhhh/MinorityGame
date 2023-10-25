@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		4F236029971A6389C88B87CC /* Pods_MinorityGame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B37466E1B130C0D17F0D4524 /* Pods_MinorityGame.framework */; };
 		6576D15D15C6645DA2BBA00B /* Pods_MinorityGameTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 980E32F38735B142544CE594 /* Pods_MinorityGameTests.framework */; };
+		7352FAF42AE7E5EB00548D88 /* ThemeModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7352FAF22AE7E5EB00548D88 /* ThemeModel.xcdatamodeld */; };
+		7352FB042AE807A000548D88 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7352FB032AE807A000548D88 /* Persistence.swift */; };
+		7352FB0B2AE80D3B00548D88 /* ThemeModel+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7352FB092AE80D3B00548D88 /* ThemeModel+CoreDataClass.swift */; };
+		7352FB0C2AE80D3B00548D88 /* ThemeModel+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7352FB0A2AE80D3B00548D88 /* ThemeModel+CoreDataProperties.swift */; };
+		7352FB0E2AE812CF00548D88 /* OwnThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7352FB0D2AE812CF00548D88 /* OwnThemeView.swift */; };
+		7352FB102AE9508600548D88 /* TopTabResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7352FB0F2AE9508600548D88 /* TopTabResultView.swift */; };
 		7355167B2A979D7F0024CF48 /* MinorityTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7355167A2A979D7F0024CF48 /* MinorityTheme.swift */; };
 		7355167D2A979E530024CF48 /* MinorityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7355167C2A979E530024CF48 /* MinorityModel.swift */; };
 		735516832A9900640024CF48 /* FourthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 735516822A9900640024CF48 /* FourthView.swift */; };
@@ -50,6 +56,12 @@
 		0E2C73BE4A22949453FC163B /* Pods-MinorityGame-MinorityGameUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MinorityGame-MinorityGameUITests.release.xcconfig"; path = "Target Support Files/Pods-MinorityGame-MinorityGameUITests/Pods-MinorityGame-MinorityGameUITests.release.xcconfig"; sourceTree = "<group>"; };
 		2191BDF80B5542B424680F0C /* Pods-MinorityGameTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MinorityGameTests.debug.xcconfig"; path = "Target Support Files/Pods-MinorityGameTests/Pods-MinorityGameTests.debug.xcconfig"; sourceTree = "<group>"; };
 		536CA10C58FE87612B9B2B7F /* Pods-MinorityGame.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MinorityGame.debug.xcconfig"; path = "Target Support Files/Pods-MinorityGame/Pods-MinorityGame.debug.xcconfig"; sourceTree = "<group>"; };
+		7352FAF32AE7E5EB00548D88 /* ThemeModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ThemeModel.xcdatamodel; sourceTree = "<group>"; };
+		7352FB032AE807A000548D88 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		7352FB092AE80D3B00548D88 /* ThemeModel+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ThemeModel+CoreDataClass.swift"; sourceTree = "<group>"; };
+		7352FB0A2AE80D3B00548D88 /* ThemeModel+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ThemeModel+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		7352FB0D2AE812CF00548D88 /* OwnThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnThemeView.swift; sourceTree = "<group>"; };
+		7352FB0F2AE9508600548D88 /* TopTabResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTabResultView.swift; sourceTree = "<group>"; };
 		7355167A2A979D7F0024CF48 /* MinorityTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinorityTheme.swift; sourceTree = "<group>"; };
 		7355167C2A979E530024CF48 /* MinorityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinorityModel.swift; sourceTree = "<group>"; };
 		735516822A9900640024CF48 /* FourthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourthView.swift; sourceTree = "<group>"; };
@@ -131,8 +143,11 @@
 		73B2A65D2A9783F7002B3062 /* MinorityGame */ = {
 			isa = PBXGroup;
 			children = (
+				7352FB092AE80D3B00548D88 /* ThemeModel+CoreDataClass.swift */,
+				7352FB0A2AE80D3B00548D88 /* ThemeModel+CoreDataProperties.swift */,
 				73B2A65E2A9783F7002B3062 /* MinorityGameApp.swift */,
 				73B2A6602A9783F7002B3062 /* ContentView.swift */,
+				7352FB0D2AE812CF00548D88 /* OwnThemeView.swift */,
 				73B2A6882A978539002B3062 /* SecondView.swift */,
 				735516822A9900640024CF48 /* FourthView.swift */,
 				7355167A2A979D7F0024CF48 /* MinorityTheme.swift */,
@@ -141,7 +156,10 @@
 				73A90D742AA8A57300EC61B6 /* OfflineResultView.swift */,
 				73A90D722AA74E2800EC61B6 /* ResultView.swift */,
 				73A3CF9A2AC43903000D1ADE /* TopTabView.swift */,
+				7352FB0F2AE9508600548D88 /* TopTabResultView.swift */,
 				73A3CF9C2AC43CC3000D1ADE /* ChooseTopicView.swift */,
+				7352FB032AE807A000548D88 /* Persistence.swift */,
+				7352FAF22AE7E5EB00548D88 /* ThemeModel.xcdatamodeld */,
 				73B2A6622A9783F8002B3062 /* Assets.xcassets */,
 				73B2A6642A9783F8002B3062 /* Preview Content */,
 			);
@@ -438,16 +456,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				73A1BECB2AA62B84005672FF /* OfflineView.swift in Sources */,
+				7352FB0B2AE80D3B00548D88 /* ThemeModel+CoreDataClass.swift in Sources */,
 				7355167D2A979E530024CF48 /* MinorityModel.swift in Sources */,
 				73A3CF9D2AC43CC3000D1ADE /* ChooseTopicView.swift in Sources */,
+				7352FAF42AE7E5EB00548D88 /* ThemeModel.xcdatamodeld in Sources */,
 				73A90D732AA74E2800EC61B6 /* ResultView.swift in Sources */,
 				73B2A6892A978539002B3062 /* SecondView.swift in Sources */,
 				73B2A6612A9783F7002B3062 /* ContentView.swift in Sources */,
+				7352FB042AE807A000548D88 /* Persistence.swift in Sources */,
 				73B2A65F2A9783F7002B3062 /* MinorityGameApp.swift in Sources */,
 				7355167B2A979D7F0024CF48 /* MinorityTheme.swift in Sources */,
+				7352FB102AE9508600548D88 /* TopTabResultView.swift in Sources */,
 				73A3CF9B2AC43903000D1ADE /* TopTabView.swift in Sources */,
 				73A90D752AA8A57300EC61B6 /* OfflineResultView.swift in Sources */,
+				7352FB0C2AE80D3B00548D88 /* ThemeModel+CoreDataProperties.swift in Sources */,
 				735516832A9900640024CF48 /* FourthView.swift in Sources */,
+				7352FB0E2AE812CF00548D88 /* OwnThemeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -780,6 +804,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		7352FAF22AE7E5EB00548D88 /* ThemeModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				7352FAF32AE7E5EB00548D88 /* ThemeModel.xcdatamodel */,
+			);
+			currentVersion = 7352FAF32AE7E5EB00548D88 /* ThemeModel.xcdatamodel */;
+			path = ThemeModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 73B2A6532A9783F7002B3062 /* Project object */;
 }

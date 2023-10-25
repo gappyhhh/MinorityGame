@@ -14,4 +14,19 @@ struct MinorityTheme :Identifiable{
     var question:String
     var name : String
     var notes : String
+    var Count1 : Int
+    var Count2 : Int
 }
+
+//struct OwnTheme :Identifiable{
+//    
+//    
+//    var id:String
+//    var question:String
+//    var name : String
+//    var notes : String
+//    var Count1 : Int
+//    var Count2 : Int
+//}
+
+

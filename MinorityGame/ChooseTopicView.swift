@@ -10,7 +10,7 @@ import Firebase
 import UIKit
 
 struct ChooseTopicView: View {
-    
+    @Environment(\.managedObjectContext) private var context
     @State private var selectedTab:Int = 0 //選択されているタブ（みんなのお題で遊ぶとお題を自分で作成）の番号
     @State private var canSwipe:Bool = false
         //タブの切り替えをスワイプで出来なくする判定
@@ -30,6 +30,8 @@ struct ChooseTopicView: View {
         //回答済+報告済のお題番号を格納
     @State var FirstRemovenumberArray:[Int] = []
         //報告済のお題番号を格納（時間経過でお題が更新された時に適用）
+    @State var SelfID = ""
+    @State var SelfGenre = ""
     
     @Binding var memberArray:[String]
     @Binding var memberArray2:[String]
@@ -65,6 +67,10 @@ struct ChooseTopicView: View {
     @Binding var AllThemeidArray:[[String]]
     @Binding var Alreadyselection:[Int]
     @Binding var AllreportidArray:[String]
+    @Binding var Theme1CounterArray:[Int]
+    @Binding var Theme2CounterArray:[Int]
+    @Binding var AllTheme1CounterArray:[[Int]]
+    @Binding var AllTheme2CounterArray:[[Int]]
     @EnvironmentObject var alreadyselection:AlreadySelection
     
     
@@ -119,6 +125,8 @@ struct ChooseTopicView: View {
                                         ThemeArray1=[]
                                         ThemeArray2=[]
                                         ThemeidArray = []
+                                        Theme1CounterArray = []
+                                        Theme2CounterArray = []
                                         
                                         //各項目を変数に格納する
                                         for number in 0..<model.list.count {
@@ -126,6 +134,8 @@ struct ChooseTopicView: View {
                                             ThemeArray1.append(model.list[number].name)
                                             ThemeArray2.append(model.list[number].notes)
                                             ThemeidArray.append(model.list[number].id)
+                                            Theme1CounterArray.append(model.list[number].Count1)
+                                            Theme2CounterArray.append(model.list[number].Count2)
                                         }
                                         
                                         //読み込んだお題を取っておくための配列に格納する
@@ -135,6 +145,8 @@ struct ChooseTopicView: View {
                                             AllThemeArray2[selection-1].append(model.list[number].notes)
                                             AllQuestionArray[selection-1].append(model.list[number].question)
                                             AllThemeidArray[selection-1].append(model.list[number].id)
+                                            AllTheme1CounterArray[selection-1].append(model.list[number].Count1)
+                                            AllTheme2CounterArray[selection-1].append(model.list[number].Count2)
                                             
                                         }
                                         //↓このif文機能してないから消す(ジャンル選択で毎回読み取りする場合は消さない）
@@ -156,6 +168,8 @@ struct ChooseTopicView: View {
                                                 ThemeArray2.remove(at:FirstRemovenumberArray[number])
                                                 QuestionArray.remove(at:FirstRemovenumberArray[number])
                                                 ThemeidArray.remove(at:FirstRemovenumberArray[number])
+                                                Theme1CounterArray.remove(at:FirstRemovenumberArray[number])
+                                                Theme2CounterArray.remove(at:FirstRemovenumberArray[number])
                                             }
                                         }
                                         
@@ -226,7 +240,7 @@ struct ChooseTopicView: View {
                                     //ローディング表示を始める
                                     Loading = true
                                     
-                                    if Alreadyselection.firstIndex(of: selection) == nil{
+                                    if alreadyselection.AlreadySelectionArray.firstIndex(of: selection) == nil{
                                         //初めてのジャンルを選択した場合の処理
                                         print("初")
                                         
@@ -238,6 +252,8 @@ struct ChooseTopicView: View {
                                                 ThemeArray1=[]
                                                 ThemeArray2=[]
                                                 ThemeidArray = []
+                                                Theme1CounterArray = []
+                                                Theme2CounterArray = []
                                                 
                                                 //各項目を変数に格納する
                                                 for number in 0..<model.list.count {
@@ -245,6 +261,8 @@ struct ChooseTopicView: View {
                                                     ThemeArray1.append(model.list[number].name)
                                                     ThemeArray2.append(model.list[number].notes)
                                                     ThemeidArray.append(model.list[number].id)
+                                                    Theme1CounterArray.append(model.list[number].Count1)
+                                                    Theme2CounterArray.append(model.list[number].Count2)
                                                 }
                                                 //読み込んだお題を取っておくための配列に格納する
                                                 for number in 0..<model.list.count {
@@ -253,6 +271,8 @@ struct ChooseTopicView: View {
                                                     AllThemeArray2[selection-1].append(model.list[number].notes)
                                                     AllQuestionArray[selection-1].append(model.list[number].question)
                                                     AllThemeidArray[selection-1].append(model.list[number].id)
+                                                    AllTheme1CounterArray[selection-1].append(model.list[number].Count1)
+                                                    AllTheme2CounterArray[selection-1].append(model.list[number].Count2)
                                                     
                                                 }
                                                 
@@ -277,6 +297,8 @@ struct ChooseTopicView: View {
                                                         ThemeArray2.remove(at:FirstRemovenumberArray[number])
                                                         QuestionArray.remove(at:FirstRemovenumberArray[number])
                                                         ThemeidArray.remove(at:FirstRemovenumberArray[number])
+                                                        Theme1CounterArray.remove(at:FirstRemovenumberArray[number])
+                                                        Theme2CounterArray.remove(at:FirstRemovenumberArray[number])
                                                     }
                                                 }
                                                 
@@ -313,6 +335,8 @@ struct ChooseTopicView: View {
                                             ThemeArray2 = AllThemeArray2[selection-1]
                                             QuestionArray = AllQuestionArray[selection-1]
                                             ThemeidArray = AllThemeidArray[selection-1]
+                                            Theme1CounterArray = AllTheme1CounterArray[selection-1]
+                                            Theme2CounterArray = AllTheme2CounterArray[selection-1]
                                             
                                             //回答済+報告済のお題を取り除く
                                             for number in 0..<RemovenumberArray.count{
@@ -321,10 +345,13 @@ struct ChooseTopicView: View {
                                                     ThemeArray2.remove(at: RemovenumberArray[number])
                                                     QuestionArray.remove(at: RemovenumberArray[number])
                                                     ThemeidArray.remove(at: RemovenumberArray[number])
+                                                Theme1CounterArray.remove(at:RemovenumberArray[number])
+                                                Theme2CounterArray.remove(at:RemovenumberArray[number])
                                             }
                                             
                                             print(QuestionArray)
                                             print(ThemeidArray)
+                                            
                                             //出題するお題番号をランダムに決定
                                             Themenumber = Int.random(in: 0...ThemeArray1.count-1)
                                             path.append("FourthView")
@@ -490,7 +517,12 @@ struct ChooseTopicView: View {
                                 .alert("作成したお題をオンラインで\n公開しますか？",isPresented: $Decide){
                                     Button("はい"){
                                         //質問、お題1、お題2をfirebaseにアップロード
-                                        model.addData(Theme:CategoryArray[selection],question: Question,name: Theme1, notes: Theme2)
+                                        SelfID = model.addData(Theme:CategoryArray[selection],question: Question,name: Theme1, notes: Theme2)
+                                        print(SelfID)
+                                        let newThemeModel = ThemeModel(context:context)
+                                        newThemeModel.ownid = SelfID
+                                        newThemeModel.genre = CategoryArray[selection]
+                                        try? context.save()
                                         path.append("OfflineView")
                                             
                                     }
@@ -579,7 +611,11 @@ struct ChooseTopicView_Previews: PreviewProvider {
                         AllQuestionArray: .constant([["質問全部"]]),
                         AllThemeidArray: .constant([["ID全部"]]),
                         Alreadyselection: .constant([0]),
-                        AllreportidArray: .constant(["報告済のお題全部"])
+                        AllreportidArray: .constant(["報告済のお題全部"]),
+                        Theme1CounterArray: .constant([0]),
+                        Theme2CounterArray: .constant([0]),
+                        AllTheme1CounterArray: .constant([[0]]),
+                        AllTheme2CounterArray: .constant([[0]])
                         )
     }
 }

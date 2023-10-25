@@ -10,10 +10,19 @@ import SwiftUI
 import Foundation
 import Combine
 import UIKit
+import CoreData
+import Firebase
 
 
 
 struct ContentView: View {
+    //被管理オブジェクトコンテキスト(ManagedObjectContext)の取得
+    @Environment(\.managedObjectContext) private var viewContext
+    @ObservedObject var model = ViewModel()
+    //データベースよりデータを取得
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \ThemeModel.ownid,ascending: true)],animation: .default)
+    private var items: FetchedResults<ThemeModel>
     
     @Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject var alreadyselection : AlreadySelection
@@ -47,20 +56,25 @@ struct ContentView: View {
     @State var Question = ""                            //質問（自分でお題作成時）
     @State var Theme1 = ""                              //お題1(自分でお題作成時）
     @State var Theme2 = ""                              //お題2(自分でお題作成時）
-    @State var AlradyThemeArray:[[String]] = [[],[],[]] //回答済+報告済のお題全て
+    @State var AlradyThemeArray:[[String]] = [[],[],[],[]] //回答済+報告済のお題全て
     @State var ThemeidArray:[String] = []               //お題のIDの配列
     @State private var ReportidArray:[String]=[]        //報告されたお題を一時的に格納
-    @State var AlreadyThemeArray1:[[String]] = [[],[],[]] //各ジャンルのお題1全部（回答されたお題1を減らしていく）
-    @State var AlreadyThemeArray2:[[String]] = [[],[],[]] //各ジャンルのお題2全部（回答されたお題2を減らしていく）
+    @State var AlreadyThemeArray1:[[String]] = [[],[],[],[]] //各ジャンルのお題1全部（回答されたお題1を減らしていく）
+    @State var AlreadyThemeArray2:[[String]] = [[],[],[],[]] //各ジャンルのお題2全部（回答されたお題2を減らしていく）
     @State var Alreadyselection :[Int] = []             //選択されたジャンル番号を格納
-    @State var AlreadyQuestionArray:[[String]] = [[],[],[]]//各ジャンルの質問（回答された質問を減らしていく）
-    @State var AlreadyThemeidArray:[[String]] = [[],[],[]]//お題IDの配列（回答されたお題IDを減らしていく）
+    @State var AlreadyQuestionArray:[[String]] = [[],[],[],[]]//各ジャンルの質問（回答された質問を減らしていく）
+    @State var AlreadyThemeidArray:[[String]] = [[],[],[],[]]//お題IDの配列（回答されたお題IDを減らしていく）
     
-    @State var AllThemeArray1:[[String]] = [[],[],[]]   //各ジャンルのお題1を全部格納（中身は減らさない）
-    @State var AllThemeArray2:[[String]] = [[],[],[]]   //各ジャンルのお題2を全部格納（中身は減らさない）
-    @State var AllQuestionArray:[[String]] = [[],[],[]] //各ジャンルの質問を全部格納（中身は減らさない）
-    @State var AllThemeidArray:[[String]] = [[],[],[]]  //各ジャンルのお題IDを全部格納（中身は減らさない）
+    @State var AllThemeArray1:[[String]] = [[],[],[],[]]   //各ジャンルのお題1を全部格納（中身は減らさない）
+    @State var AllThemeArray2:[[String]] = [[],[],[],[]]   //各ジャンルのお題2を全部格納（中身は減らさない）
+    @State var AllQuestionArray:[[String]] = [[],[],[],[]] //各ジャンルの質問を全部格納（中身は減らさない）
+    @State var AllThemeidArray:[[String]] = [[],[],[],[]]  //各ジャンルのお題IDを全部格納（中身は減らさない）
     @State var AllReportidArray:[String] = []           //報告されたお題IDを全部格納
+    @State var Theme1CounterArray:[Int] = []            //各お題1の全国投票数を格納
+    @State var Theme2CounterArray:[Int] = []            //各お題2の全国投票数を格納
+    @State var AllTheme1CounterArray:[[Int]] = [[],[],[],[]]         //各お題1の全国投票数を格納（中身は減らさない）
+    @State var AllTheme2CounterArray:[[Int]] = [[],[],[],[]]         //各お題2の全国投票数を格納（中身は減らさない）
+    @State var OwnThemeArray:String = ""
     //--
     
     
@@ -107,6 +121,10 @@ struct ContentView: View {
                     //ContentViewで定義した変数の中で使用する変数を各Viewへ受け渡す
                     .navigationDestination(for: String.self) {route in
                         switch route{
+                            
+                        case "OwnThemeView":
+                            OwnThemeView(
+                                OwnThemeArray:$OwnThemeArray)
                         case "SecondView":
                             SecondView(
                                 memberArray:$memberArray,
@@ -176,7 +194,11 @@ struct ContentView: View {
                                 AllThemeArray2: $AllThemeArray2,
                                 AllQuestionArray:$AllQuestionArray,
                                 AllThemeidArray: $AllThemeidArray,
-                            AllReportidArray: $AllReportidArray)
+                            AllReportidArray: $AllReportidArray,
+                                Theme1CounterArray:$Theme1CounterArray,
+                                Theme2CounterArray:$Theme2CounterArray,
+                                AllTheme1CounterArray:$AllTheme1CounterArray,
+                                AllTheme2CounterArray:$AllTheme2CounterArray)
                             
                         case "OfflineView":
                             OfflineView(OfflineResultShow_red: $OfflineResultShow_red,OfflineResultShow_white:$OfflineResultShow_white,ResultMemberArray1: $ResultMemberArray1, ResultMemberArray2: $ResultMemberArray2, memberAll: $memberAll, memberArray: $memberArray, memberArray2: $memberArray2, Question: $Question, Theme1: $Theme1, Theme2: $Theme2, selection: $selection, CategoryArray: $CategoryArray, anonymous: $anonymous, path: $path, ResultCount1: $ResultCount1, ResultCount2: $ResultCount2)
@@ -219,7 +241,11 @@ struct ContentView: View {
                                 AllQuestionArray:$AllQuestionArray,
                                 AllThemeidArray: $AllThemeidArray,
                                 Alreadyselection:$Alreadyselection,
-                                AllreportidArray: $AllReportidArray
+                                AllreportidArray: $AllReportidArray,
+                                Theme1CounterArray:$Theme1CounterArray,
+                                Theme2CounterArray:$Theme2CounterArray,
+                                AllTheme1CounterArray:$AllTheme1CounterArray,
+                                AllTheme2CounterArray:$AllTheme2CounterArray
                             )
                             
                         default:
@@ -227,7 +253,34 @@ struct ContentView: View {
                         }
                     }
                     
-                    
+                    Button(action:{
+                        
+                        let db = Firestore.firestore()
+                        for number in 0..<items.count {
+                            db.collection(items[number].genre!).document(items[number].ownid!).getDocument { (document,error) in
+                                if let document = document,document.exists{
+                                    OwnThemeArray = document.data().map(String.init(describing:)) ?? "nil"
+                                    print(OwnThemeArray)
+//                                    let an = document.data()
+//                                    print(an["Average1"])
+                                    
+                                }
+                                else{
+                                    print("Document does not exist")
+                                }
+                            }
+                        }
+//                        for number in 0..<items.count {
+//                            model.searchData(Theme: items[number].genre!, id: items[number].ownid!)
+//                        }
+                        path.append("OwnThemeView")
+                    }) {
+                        Image("OwnTheme")
+                            .renderingMode(.original)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width:CGFloat(width)/1.3)
+                    }
                     // 「遊び方」ボタンの定義
                     Button(action:{path.append("ChooseTopicView")
                         print(height)
@@ -238,6 +291,9 @@ struct ContentView: View {
                             .scaledToFit()
                             .frame(width:CGFloat(width)/1.3)
                     }
+                    
+                    
+
                 }
             }
         }

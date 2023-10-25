@@ -20,6 +20,7 @@ import Firebase
 @main
 struct MinorityGameApp: App {
     @EnvironmentObject var alreadyselection : AlreadySelection
+    let persistenceController = PersistenceController.shared
     
     init(){
         FirebaseApp.configure()
@@ -28,6 +29,7 @@ struct MinorityGameApp: App {
         WindowGroup {
                 ContentView()
                 .environmentObject(AlreadySelection())
+                .environment(\.managedObjectContext,persistenceController.container.viewContext)
         }
     }
 }
