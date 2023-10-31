@@ -15,6 +15,7 @@ class ViewModel: ObservableObject{
     @Published var list = [MinorityTheme]()
 //    @Published var Ownlist = [OwnTheme]()
     @Published var Internet = true
+    @Published var owntheme_theme1 : String = ""
     
     //name = Theme2
     //notes = Theme1
@@ -27,18 +28,27 @@ class ViewModel: ObservableObject{
         
     }
     
-    func searchData(Theme:String,id:String){
+    func searchData(Theme:String,id:String)->String{
         let db = Firestore.firestore()
         db.collection(Theme).document(id).getDocument { (document,error) in
-            if let document = document,document.exists{
-                let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
-                print(dataDescription)
+            guard error == nil else{
+                print("error")
+                return
             }
-            else{
-                print("Document does not exist")
+            if let document = document,document.exists{
+                let data = document.data()
+                if let data = data{
+                    DispatchQueue.main.asyncAfter(deadline: .now()+3){
+                        //Update the list property in the main thread
+                        
+                        self.owntheme_theme1 = data["Theme1"] as? String ?? ""
+                        print(self.owntheme_theme1)
+                    }
+                }
             }
         }
-//        return themearray
+
+        return owntheme_theme1
     }
     
 //    func newsearchData(Theme:String,id:String,completion: @escaping ()->()){

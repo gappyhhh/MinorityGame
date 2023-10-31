@@ -51,6 +51,11 @@ struct FourthView: View {
     @Binding var ResultCount2:Int
     @Binding var ThemeidArray:[String]
     @Binding var ReportidArray:[String]
+    @Binding var AllThemeidArray:[[String]]
+    @Binding var Theme1CounterArray:[Int]
+    @Binding var Theme2CounterArray:[Int]
+    @Binding var AllTheme1CounterArray:[[Int]]
+    @Binding var AllTheme2CounterArray:[[Int]]
     
     var body: some View {
         let bounds = UIScreen.main.bounds
@@ -263,6 +268,12 @@ struct FourthView: View {
                         ResultCount1 = ResultArray.filter {$0.contains(ThemeArray1[Themenumber])}.count
                         ResultCount2 = ResultArray.filter {$0.contains(ThemeArray2[Themenumber])}.count
                         print(ResultCount1,ResultCount2)
+                        model.updateData(Theme: CategoryArray[selection], id: ThemeidArray[Themenumber], ResultCounter1: ResultCount1+Theme1CounterArray[Themenumber], ResultCounter2: ResultCount2+Theme2CounterArray[Themenumber])
+                        
+                        if let index = AllThemeidArray[selection-1].firstIndex(of:ThemeidArray[Themenumber]){
+                            AllTheme1CounterArray[selection-1][index] = ResultCount1 + Theme1CounterArray[Themenumber]}
+                        if let index = AllThemeidArray[selection-1].firstIndex(of:ThemeidArray[Themenumber]){
+                            AllTheme2CounterArray[selection-1][index] = ResultCount2 + Theme2CounterArray[Themenumber]}
                         path.append("ResultView")
                         if ResultCount1 > ResultCount2{
                             ONlineResultShow_red = true
@@ -349,7 +360,12 @@ struct FourthView_Previews: PreviewProvider {
                    ResultCount1: .constant(1),
                    ResultCount2: .constant(1),
                    ThemeidArray: .constant(["id"]),
-                   ReportidArray: .constant(["報告済のお題"])
+                   ReportidArray: .constant(["報告済のお題"]),
+                   AllThemeidArray: .constant([["ID全部"]]),
+                   Theme1CounterArray: .constant([0]),
+                   Theme2CounterArray: .constant([0]),
+                   AllTheme1CounterArray: .constant([[0]]),
+                   AllTheme2CounterArray: .constant([[0]])
         )
     }
 }

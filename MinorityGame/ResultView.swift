@@ -97,14 +97,27 @@ struct ResultView: View {
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.1)
                         }.padding(.top,CGFloat(height)/12.5)
-                        Spacer()
+                        
                         HStack(alignment: .bottom,spacing:20){
                             VStack(spacing:0){
                                 //                        Text(String(ResultCount1))
                                 //                            .font(.system(size:CGFloat(height)/20))
+                                
+                                Text(ThemeArray1[Themenumber])
+                                    .fontWeight(.semibold)
+                                    .frame(width:CGFloat(width)/2.4,height: CGFloat(height)/7)
+                                    .foregroundColor(Color.black)
+                                    .background(Color.gray.cornerRadius(20).opacity(0.2))
+                                    .font(.system(size:CGFloat(height)/45))
+                                    .compositingGroup()
+                                    .shadow(color:.primary.opacity(0.4),radius: 3,x:4,y:4)
+                                
+                                Spacer()
+                                
                                 Text("\(ResultMemberArray1.count)")
                                     .padding(5)
                                     .font(.system(size:CGFloat(height)/35))
+                                
                                 if anonymous == true {
                                     ForEach(0..<ResultMemberArray1.count, id:\.self ) {
                                         index in Text(ResultMemberArray1[index])
@@ -117,7 +130,7 @@ struct ResultView: View {
                                             .minimumScaleFactor(0.1)
                                     }
                                 } else {
-                                    Text(ThemeArray1[Themenumber])
+                                    Text(" ")
                                         .frame(width:CGFloat(width)/2.4,height: CGFloat(height)*CGFloat(ResultMemberArray1.count)/21)
                                         .foregroundColor(Color.black)
                                         .background(ONlineResultShow_red ? .white:.red)
@@ -127,6 +140,18 @@ struct ResultView: View {
                             VStack(spacing:0){
                                 //                        Text(String(ResultCount2))
                                 //                            .font(.system(size:CGFloat(height)/20))
+                                
+                                Text(ThemeArray2[Themenumber])
+                                    .frame(width:CGFloat(width)/2.4,height: CGFloat(height)/7)
+                                    .foregroundColor(Color.black)
+                                    .background(Color.gray.cornerRadius(20).opacity(0.2))
+                                    .font(.system(size:CGFloat(height)/45))
+                                    .compositingGroup()
+                                    .shadow(color:.primary.opacity(0.4),radius: 3,x:4,y:4)
+                                    .fontWeight(.semibold)
+                                
+                                Spacer()
+                                
                                 Text("\(ResultMemberArray2.count)")
                                     .padding(5)
                                     .font(.system(size:CGFloat(height)/35))
@@ -143,7 +168,7 @@ struct ResultView: View {
                                             .minimumScaleFactor(0.1)
                                     }
                                 } else {
-                                    Text(ThemeArray2[Themenumber])
+                                    Text(" ")
                                         .frame(width:CGFloat(width)/2.4,height: CGFloat(height)*CGFloat(ResultMemberArray2.count)/21)
                                         .foregroundColor(Color.black)
                                         .background(ONlineResultShow_white ? .white:.red)
@@ -334,60 +359,61 @@ struct ResultView: View {
                                 .minimumScaleFactor(0.1)
                         }
                         .padding(.top,CGFloat(height)/12.5)
-                        Spacer()
+                        
                         HStack(alignment: .bottom,spacing:20){
                             VStack(spacing:0){
                                 //                        Text(String(ResultCount1))
                                 //                            .font(.system(size:CGFloat(height)/20))
-                                Text("\(Theme1CounterArray[Themenumber])")
-                                    .padding(5)
-                                    .font(.system(size:CGFloat(height)/35))
-                                if anonymous == true {
-                                    ForEach(0..<ResultMemberArray1.count, id:\.self ) {
-                                        index in Text(ResultMemberArray1[index])
-                                            .padding(4)
-                                            .frame(width:CGFloat(width)/2.4,height: CGFloat(height)/21)
-                                            .font(.system(size:CGFloat(height)/35))
-                                            .foregroundColor(Color.black)
-                                            .background(ONlineResultShow_red ? .white:.red)
-                                            .lineLimit(1)
-                                            .minimumScaleFactor(0.1)
-                                    }
-                                } else {
-                                    Text(ThemeArray1[Themenumber])
-                                        .frame(width:CGFloat(width)/2.4,height: CGFloat(height)*CGFloat(Theme1CounterArray[Themenumber])/30)
-                                        .foregroundColor(Color.black)
-                                        .background(ONlineResultShow_red ? .white:.red)
-                                        .font(.system(size:CGFloat(height)/45))
-                                }
-                            }
-                            VStack(spacing:0){
-                                //                        Text(String(ResultCount2))
-                                //                            .font(.system(size:CGFloat(height)/20))
-                                Text("\(Theme2CounterArray[Themenumber])")
+                                
+                                Text(ThemeArray1[Themenumber])
+                                    .fontWeight(.semibold)
+                                    .frame(width:CGFloat(width)/2.4,height: CGFloat(height)/7)
+                                    .foregroundColor(Color.black)
+                                    .background(Color.gray.cornerRadius(20).opacity(0.2))
+                                    .font(.system(size:CGFloat(height)/45))
+                                    .compositingGroup()
+                                    .shadow(color:.primary.opacity(0.4),radius: 3,x:4,y:4)
+                                
+                                Spacer()
+                                
+                                Text("\(Theme1CounterArray[Themenumber]+ResultCount1)")
                                     .padding(5)
                                     .font(.system(size:CGFloat(height)/35))
                                 
-                                if anonymous == true {
-                                    ForEach(0..<ResultMemberArray2.count, id:\.self ) {
-                                        index in Text(ResultMemberArray2[index])
-                                            .padding(4)
-                                            .frame(width:CGFloat(width)/2.4,height: CGFloat(height)/21)
-                                            .font(.system(size:CGFloat(height)/35))
-                                            .foregroundColor(Color.black)
-                                            .background(ONlineResultShow_white ? .white:.red)
-                                            .lineLimit(1)
-                                            .minimumScaleFactor(0.1)
-                                    }
-                                } else {
-                                    Text(ThemeArray2[Themenumber])
-                                        .frame(width:CGFloat(width)/2.4,height: CGFloat(height)*CGFloat(Theme2CounterArray[Themenumber])/30)
-                                        .foregroundColor(Color.black)
-                                        .background(ONlineResultShow_white ? .white:.red)
-                                        .font(.system(size:CGFloat(height)/45))
-                                }
+                                Text(" ")
+                                    .frame(width:CGFloat(width)/2.4,
+                                           height:(CGFloat(height)/2.2) * ((CGFloat(Theme1CounterArray[Themenumber])+CGFloat(ResultCount1)) / (CGFloat(Theme1CounterArray[Themenumber])+CGFloat(Theme2CounterArray[Themenumber])+CGFloat(ResultCount1)+CGFloat(ResultCount2))))
+                                    .foregroundColor(Color.black)
+                                    .background(ONlineResultShow_red ? .white:.red)
+                                    .font(.system(size:CGFloat(height)/45))
                             }
                             
+                            VStack(spacing:0){
+                                //                        Text(String(ResultCount2))
+                                //                            .font(.system(size:CGFloat(height)/20))
+                        
+                                Text(ThemeArray2[Themenumber])
+                                    .fontWeight(.semibold)
+                                    .frame(width:CGFloat(width)/2.4,height: CGFloat(height)/7)
+                                    .foregroundColor(Color.black)
+                                    .background(Color.gray.cornerRadius(20).opacity(0.2))
+                                    .font(.system(size:CGFloat(height)/45))
+                                    .compositingGroup()
+                                    .shadow(color:.primary.opacity(0.4),radius: 3,x:4,y:4)
+                                
+                                Spacer()
+                                
+                                Text("\(Theme2CounterArray[Themenumber]+ResultCount2)")
+                                    .padding(5)
+                                    .font(.system(size:CGFloat(height)/35))
+                                
+                                Text(" ")
+                                    .frame(width:CGFloat(width)/2.4,
+                                           height:(CGFloat(height)/2.2) * ((CGFloat(Theme2CounterArray[Themenumber])+CGFloat(ResultCount2)) / (CGFloat(Theme1CounterArray[Themenumber])+CGFloat(Theme2CounterArray[Themenumber])+CGFloat(ResultCount1)+CGFloat(ResultCount2))))
+                                    .foregroundColor(Color.black)
+                                    .background(ONlineResultShow_white ? .white:.red)
+                                    .font(.system(size:CGFloat(height)/45))
+                            }
                         }
                         
                         //                Text("選んだ理由について話し合ってみよう！")
@@ -397,12 +423,12 @@ struct ResultView: View {
                         HStack(alignment: .center,spacing:0){
                             // 「ジャンル選択へ」ボタンの定義
                             Button(action:{
-                                model.updateData(Theme: CategoryArray[selection], id: ThemeidArray[Themenumber], ResultCounter1: ResultCount1+Theme1CounterArray[Themenumber], ResultCounter2: ResultCount2+Theme2CounterArray[Themenumber])
-                                
-                                if let index = AllThemeidArray[selection-1].firstIndex(of:ThemeidArray[Themenumber]){
-                                    AllTheme1CounterArray[selection-1][index] = ResultCount1 + Theme1CounterArray[Themenumber]}
-                                if let index = AllThemeidArray[selection-1].firstIndex(of:ThemeidArray[Themenumber]){
-                                    AllTheme2CounterArray[selection-1][index] = ResultCount2 + Theme2CounterArray[Themenumber]}
+//                                model.updateData(Theme: CategoryArray[selection], id: ThemeidArray[Themenumber], ResultCounter1: ResultCount1+Theme1CounterArray[Themenumber], ResultCounter2: ResultCount2+Theme2CounterArray[Themenumber])
+//
+//                                if let index = AllThemeidArray[selection-1].firstIndex(of:ThemeidArray[Themenumber]){
+//                                    AllTheme1CounterArray[selection-1][index] = ResultCount1 + Theme1CounterArray[Themenumber]}
+//                                if let index = AllThemeidArray[selection-1].firstIndex(of:ThemeidArray[Themenumber]){
+//                                    AllTheme2CounterArray[selection-1][index] = ResultCount2 + Theme2CounterArray[Themenumber]}
                                 //                        AllTheme1CounterArray[selection-1][Themenumber] = ResultCount1 + Theme1CounterArray[Themenumber]
                                 //                        AllTheme2CounterArray[selection-1][Themenumber] = ResultCount2 + Theme2CounterArray[Themenumber]
                                 
@@ -434,11 +460,11 @@ struct ResultView: View {
                             // 「次の問題へ」ボタンの定義
                             Button(action:{
                                 
-                                model.updateData(Theme: CategoryArray[selection], id: ThemeidArray[Themenumber], ResultCounter1: ResultCount1+Theme1CounterArray[Themenumber], ResultCounter2: ResultCount2+Theme2CounterArray[Themenumber])
-                                if let index = AllThemeidArray[selection-1].firstIndex(of:ThemeidArray[Themenumber]){
-                                    AllTheme1CounterArray[selection-1][index] = ResultCount1 + Theme1CounterArray[Themenumber]}
-                                if let index = AllThemeidArray[selection-1].firstIndex(of:ThemeidArray[Themenumber]){
-                                    AllTheme2CounterArray[selection-1][index] = ResultCount2 + Theme2CounterArray[Themenumber]}
+//                                model.updateData(Theme: CategoryArray[selection], id: ThemeidArray[Themenumber], ResultCounter1: ResultCount1+Theme1CounterArray[Themenumber], ResultCounter2: ResultCount2+Theme2CounterArray[Themenumber])
+//                                if let index = AllThemeidArray[selection-1].firstIndex(of:ThemeidArray[Themenumber]){
+//                                    AllTheme1CounterArray[selection-1][index] = ResultCount1 + Theme1CounterArray[Themenumber]}
+//                                if let index = AllThemeidArray[selection-1].firstIndex(of:ThemeidArray[Themenumber]){
+//                                    AllTheme2CounterArray[selection-1][index] = ResultCount2 + Theme2CounterArray[Themenumber]}
                                 //                        Theme2CounterArray[Themenumber] = ResultCount2 + Theme2CounterArray[Themenumber]
                                 ResultMemberArray1.removeAll()
                                 ResultMemberArray2.removeAll()
