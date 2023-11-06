@@ -40,19 +40,15 @@ struct OfflineResultView: View {
             if height/width >= 2{
                 Image("Background")
                     .resizable()
-                //                .aspectRatio(contentMode: .fill)
                     .edgesIgnoringSafeArea(.all)
-
             }
             
             VStack(alignment: .center,spacing:10) {
-                
                 Image("Result")
                     .resizable(capInsets: EdgeInsets())
                     .scaledToFit()
                     .frame(width:CGFloat(width)/1.5)
                     
-                
                 HStack{
                     Text("Q.")
                         .font(.system(size:CGFloat(width)/15))
@@ -62,52 +58,95 @@ struct OfflineResultView: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.1)
                 }
+
                 Spacer()
+                
                 HStack(alignment: .bottom,spacing:20){
-                    VStack{
-//                        Text(String(ResultCount1))
-//                            .font(.system(size:CGFloat(width)/12))
+                    VStack(spacing:0){
+                        
                         Text(Theme1)
+                            .fontWeight(.semibold)
                             .frame(width:CGFloat(width)/2.4,height: CGFloat(height)/7)
                             .foregroundColor(Color.black)
-                            .background(OfflineResultShow_red ? .white:.red)
+                            .background(Color.gray.cornerRadius(20).opacity(0.2))
                             .font(.system(size:CGFloat(height)/45))
-//                        if anonymous == false{
-                            ForEach(0..<ResultMemberArray1.count, id:\.self ){index in Text(ResultMemberArray1[index])
+                            .compositingGroup()
+                            .shadow(color:.primary.opacity(0.4),radius: 3,x:4,y:4)
+                        
+                        Spacer()
+                        
+                        Text("\(ResultMemberArray1.count)")
+                            .padding(5)
+                            .font(.system(size:CGFloat(height)/35))
+                        
+                        if anonymous == true {
+                            ForEach(0..<ResultMemberArray1.count, id:\.self ) {
+                                index in Text(ResultMemberArray1[index])
                                     .padding(4)
-                                    .frame(width:CGFloat(width)/2.4).font(.system(size:CGFloat(height)/42))
-                                    .background(Color.gray)
-                                    .foregroundColor(Color.white)
+                                    .frame(width:CGFloat(width)/2.4,height: CGFloat(height)/21)
+                                    .font(.system(size:CGFloat(height)/35))
+                                    .foregroundColor(Color.black)
+                                    .background(OfflineResultShow_red ? .white:.red)
                                     .lineLimit(1)
                                     .minimumScaleFactor(0.1)
                             }
-//                        }
-                            
+                        } else {
+                            Text(" ")
+                                .frame(width:CGFloat(width)/2.4,height: CGFloat(height)*CGFloat(ResultMemberArray1.count)/21)
+                                .foregroundColor(Color.black)
+                                .background(OfflineResultShow_red ? .white:.red)
+                                .font(.system(size:CGFloat(height)/45))
+                        }
                     }
-                    VStack{
-//                        Text(String(ResultCount2))
-//                            .font(.system(size:CGFloat(width)/12))
+
+                    VStack(spacing:0){
+                        
                         Text(Theme2)
                             .frame(width:CGFloat(width)/2.4,height: CGFloat(height)/7)
                             .foregroundColor(Color.black)
-                            .background(OfflineResultShow_white ? .white:.red)
+                            .background(Color.gray.cornerRadius(20).opacity(0.2))
                             .font(.system(size:CGFloat(height)/45))
-//                        if anonymous == false{
-                            ForEach(0..<ResultMemberArray2.count, id:\.self ){index in Text(ResultMemberArray2[index])
+                            .compositingGroup()
+                            .shadow(color:.primary.opacity(0.4),radius: 3,x:4,y:4)
+                            .fontWeight(.semibold)
+                        
+                        Spacer()
+                        
+                        Text("\(ResultMemberArray2.count)")
+                            .padding(5)
+                            .font(.system(size:CGFloat(height)/35))
+                        
+                        if anonymous == true {
+                            ForEach(0..<ResultMemberArray2.count, id:\.self ) {
+                                index in Text(ResultMemberArray2[index])
                                     .padding(4)
-                                    .frame(width:CGFloat(width)/2.4).font(.system(size:CGFloat(height)/42))
-                                    .background(Color.gray)
-                                    .foregroundColor(Color.white)
+                                    .frame(width:CGFloat(width)/2.4,height: CGFloat(height)/21)
+                                    .font(.system(size:CGFloat(height)/35))
+                                    .foregroundColor(Color.black)
+                                    .background(OfflineResultShow_white ? .white:.red)
                                     .lineLimit(1)
                                     .minimumScaleFactor(0.1)
                             }
-//                        }
+                        } else {
+                            Text(" ")
+                                .frame(width:CGFloat(width)/2.4,height: CGFloat(height)*CGFloat(ResultMemberArray2.count)/21)
+                                .foregroundColor(Color.black)
+                                .background(OfflineResultShow_white ? .white:.red)
+                                .font(.system(size:CGFloat(height)/45))
+                        }
                     }
-                    
-                        
                 }.padding(.bottom)
-//                Text("選んだ理由について話し合ってみよう！")
-//                    .font(.system(size:CGFloat(width)/22))
+                
+                HStack(alignment: .bottom,spacing:20){
+                    Text("名前を表示する：")
+                        .padding(.bottom,CGFloat(height)/200)
+                    Toggle("",isOn:$anonymous).labelsHidden()
+                        .onAppear {
+                            //初期値を代入
+                            anonymous = false
+                        }
+                }
+
                 // 次の問題へボタンの定義
                 Button(action:{
                     ResultMemberArray1.removeAll()

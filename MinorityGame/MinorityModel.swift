@@ -28,58 +28,35 @@ class ViewModel: ObservableObject{
         
     }
     
-    func searchData(Theme:String,id:String)->String{
-        let db = Firestore.firestore()
-        db.collection(Theme).document(id).getDocument { (document,error) in
-            guard error == nil else{
-                print("error")
-                return
-            }
-            if let document = document,document.exists{
-                let data = document.data()
-                if let data = data{
-                    DispatchQueue.main.asyncAfter(deadline: .now()+3){
-                        //Update the list property in the main thread
-                        
-                        self.owntheme_theme1 = data["Theme1"] as? String ?? ""
-                        print(self.owntheme_theme1)
-                    }
-                }
-            }
-        }
-
-        return owntheme_theme1
-    }
-    
-//    func newsearchData(Theme:String,id:String,completion: @escaping ()->()){
+//    func searchData(Theme:String,id:String)->String{
 //        let db = Firestore.firestore()
-//        let docRef = db.collection(Theme).document(id)
-//        docRef.getDocument {(document,error) in
+//        db.collection(Theme).document(id).getDocument { (document,error) in
+//            guard error == nil else{
+//                print("error")
+//                return
+//            }
 //            if let document = document,document.exists{
-//                DispatchQueue.main.async{
-//                    //Update the list property in the main thread
-//                }
-
-//                //                   let question = docDict["Question"] as? String,
-//                //                   let theme1 = docDict["Theme1"] as? String,
-//                //                   let theme2 = docDict["Theme2"] as? String,
-//                //                   let Count1 = docDict["Average1"] as? Int,
-//                //                   let Count2 = docDict["Average2"] as? Int {
-//                //                   let dataDescription = "Question->\(question),Theme1->\(theme1),Theme2->\(theme2),Average1->\(Count1),Average2->\(Count2)"
-//                completion()
-//            }
-//            else{
-//                print("cannot retrieve data")
-//            }
+//                let data = document.data()
+//                if let data = data{
+//                    DispatchQueue.main.asyncAfter(deadline: .now()+3){
+//                        //Update the list property in the main thread
 //
+//                        self.owntheme_theme1 = data["Theme1"] as? String ?? ""
+//                        print(self.owntheme_theme1)
+//                    }
+//                }
+//            }
 //        }
+//
+//        return owntheme_theme1
 //    }
     
-    func addData(Theme:String,question:String, name: String, notes:String)->String{
+    
+    func addData(Theme:String,question:String, name: String, notes:String, Count1:Int, Count2:Int)->String{
         
         let db = Firestore.firestore()
         let useid = db.collection(Theme).document().documentID
-        db.collection(Theme).document(useid).setData(["Question":question,"Theme1":name,"Theme2":notes]){ error in
+        db.collection(Theme).document(useid).setData(["Question":question,"Theme1":name,"Theme2":notes,"Average1":Count1,"Average2":Count2]){ error in
 //        db.collection(Theme).addDocument(data:["Question":question,"Theme1":name,"Theme2":notes]){ error in
             //Check for errors
             if error == nil{

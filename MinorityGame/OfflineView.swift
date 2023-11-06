@@ -8,10 +8,13 @@
 import SwiftUI
 
 struct OfflineView: View {
+    @Environment(\.managedObjectContext) private var context
+    @ObservedObject var model = ViewModel()
     @State var ResultArray:[String] = []
     @State var membernumber = 0
     @State var LeftTheme : Bool = false
     @State var RightTheme : Bool = false
+    @State var SelfID = ""
     @Binding var OfflineResultShow_red : Bool
     @Binding var OfflineResultShow_white : Bool
     @Binding var ResultMemberArray1:[String]
@@ -28,6 +31,7 @@ struct OfflineView: View {
     @Binding var path:NavigationPath
     @Binding var ResultCount1:Int
     @Binding var ResultCount2:Int
+    @Binding var Upload:Bool
     
     
     
@@ -126,6 +130,7 @@ struct OfflineView: View {
                                 Text(Theme1)
                                     .foregroundColor(.black)
                                     .font(.system(size:20))
+                                    .multilineTextAlignment(.leading)
                             )
                     }).shadow(color:.primary.opacity(0.2),radius: 3,x:4,y:4)
                     Button(action:{RightTheme = true
@@ -138,6 +143,7 @@ struct OfflineView: View {
                                 Text(Theme2)
                                     .foregroundColor(.black)
                                     .font(.system(size:20))
+                                    .multilineTextAlignment(.leading)
                             )
                     }).shadow(color:.primary.opacity(0.2),radius: 3,x:4,y:4)
                 }
@@ -165,6 +171,14 @@ struct OfflineView: View {
                         ResultCount1 = ResultArray.filter {$0.contains(Theme1)}.count
                         ResultCount2 = ResultArray.filter {$0.contains(Theme2)}.count
                         print(ResultCount1,ResultCount2)
+                        if Upload == true{
+                            SelfID = model.addData(Theme:CategoryArray[selection],question: Question,name: Theme1, notes: Theme2,Count1: ResultCount1,Count2: ResultCount2)
+                            print(SelfID)
+                            let newThemeModel = ThemeModel(context:context)
+                            newThemeModel.ownid = SelfID
+                            newThemeModel.genre = CategoryArray[selection]
+                            try? context.save()
+                        }
                         path.append("OfflineResultView")
                         if ResultCount1 > ResultCount2{
                             OfflineResultShow_red = true
@@ -229,7 +243,8 @@ struct OfflineView_Previews: PreviewProvider {
                     anonymous: .constant(true),
                     path:.constant(NavigationPath("パス")),
                     ResultCount1: .constant(0),
-                    ResultCount2: .constant(0)
+                    ResultCount2: .constant(0),
+                    Upload: .constant(false)
                     
                     )
     }

@@ -24,6 +24,11 @@ struct ContentView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \ThemeModel.ownid,ascending: true)],animation: .default)
     private var items: FetchedResults<ThemeModel>
     
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \ReportModel.reportid,ascending: true)],animation: .default)
+    private var reportid: FetchedResults<ReportModel>
+
+    
     @Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject var alreadyselection : AlreadySelection
     @State var inactivetime = 0
@@ -80,6 +85,7 @@ struct ContentView: View {
     @State var OwnCount1Array:[Int] = []
     @State var OwnCount2Array:[Int] = []
     @State var Loading_Own = false
+    @State var Upload = false
      //--
     
     
@@ -127,6 +133,9 @@ struct ContentView: View {
                         //ContentViewで定義した変数の中で使用する変数を各Viewへ受け渡す
                         .navigationDestination(for: String.self) {route in
                             switch route{
+                                
+                            case "InstructionView":
+                                InstructionVIew()
                                 
                             case "OwnThemeView":
                                 OwnThemeView(
@@ -178,11 +187,15 @@ struct ContentView: View {
                                     ResultCount2:$ResultCount2,
                                     ThemeidArray: $ThemeidArray,
                                     ReportidArray: $ReportidArray,
+                                    AllThemeArray1: $AllThemeArray1,
+                                    AllThemeArray2: $AllThemeArray2,
+                                    AllQuestionArray:$AllQuestionArray,
                                     AllThemeidArray: $AllThemeidArray,
                                     Theme1CounterArray:$Theme1CounterArray,
                                     Theme2CounterArray:$Theme2CounterArray,
                                     AllTheme1CounterArray:$AllTheme1CounterArray,
-                                    AllTheme2CounterArray:$AllTheme2CounterArray)
+                                    AllTheme2CounterArray:$AllTheme2CounterArray,
+                                    AlreadyThemeArray: $AlradyThemeArray)
                             case "ResultView":
                                 ResultView(
                                     memberArray:$memberArray,
@@ -217,7 +230,7 @@ struct ContentView: View {
                                     AllTheme2CounterArray:$AllTheme2CounterArray)
                                 
                             case "OfflineView":
-                                OfflineView(OfflineResultShow_red: $OfflineResultShow_red,OfflineResultShow_white:$OfflineResultShow_white,ResultMemberArray1: $ResultMemberArray1, ResultMemberArray2: $ResultMemberArray2, memberAll: $memberAll, memberArray: $memberArray, memberArray2: $memberArray2, Question: $Question, Theme1: $Theme1, Theme2: $Theme2, selection: $selection, CategoryArray: $CategoryArray, anonymous: $anonymous, path: $path, ResultCount1: $ResultCount1, ResultCount2: $ResultCount2)
+                                OfflineView(OfflineResultShow_red: $OfflineResultShow_red,OfflineResultShow_white:$OfflineResultShow_white,ResultMemberArray1: $ResultMemberArray1, ResultMemberArray2: $ResultMemberArray2, memberAll: $memberAll, memberArray: $memberArray, memberArray2: $memberArray2, Question: $Question, Theme1: $Theme1, Theme2: $Theme2, selection: $selection, CategoryArray: $CategoryArray, anonymous: $anonymous, path: $path, ResultCount1: $ResultCount1, ResultCount2: $ResultCount2,Upload:$Upload)
                                 
                             case "OfflineResultView":
                                 OfflineResultView(Question: $Question, memberAll: $memberAll, memberArray: $memberArray, memberArray2: $memberArray2, Theme1: $Theme1, Theme2: $Theme2, selection: $selection, CategoryArray: $CategoryArray, ResultCount1: $ResultCount1, ResultCount2: $ResultCount2, OfflineResultShow_red: $OfflineResultShow_red, OfflineResultShow_white: $OfflineResultShow_white, anonymous: $anonymous, ResultMemberArray1: $ResultMemberArray1, ResultMemberArray2: $ResultMemberArray2, path: $path)
@@ -261,7 +274,8 @@ struct ContentView: View {
                                     Theme1CounterArray:$Theme1CounterArray,
                                     Theme2CounterArray:$Theme2CounterArray,
                                     AllTheme1CounterArray:$AllTheme1CounterArray,
-                                    AllTheme2CounterArray:$AllTheme2CounterArray
+                                    AllTheme2CounterArray:$AllTheme2CounterArray,
+                                    Upload:$Upload
                                 )
                                 
                             default:
@@ -291,7 +305,11 @@ struct ContentView: View {
                                             OwnQuestionArray.append(data["Question"] as? String ?? "")
                                             OwnCount1Array.append(data["Average1"] as? Int ?? Int())
                                             OwnCount2Array.append(data["Average2"] as? Int ?? Int())
-                                        }}
+                                        }
+                                        DispatchQueue.main.asyncAfter(deadline: .now()+3) {
+                                            Loading_Own = false
+                                        }
+                                    }
                                     
                                 }
                             }
@@ -301,9 +319,6 @@ struct ContentView: View {
                             //                        print(OwnCount1Array)
                             //                        print(OwnCount2Array)
                             path.append("OwnThemeView")
-                            DispatchQueue.main.asyncAfter(deadline: .now()+3) {
-                                Loading_Own = false
-                            }
                         }) {
                             Image("OwnTheme")
                                 .renderingMode(.original)
@@ -312,8 +327,8 @@ struct ContentView: View {
                                 .frame(width:CGFloat(width)/1.3)
                         }
                         // 「遊び方」ボタンの定義
-                        Button(action:{path.append("ChooseTopicView")
-                            print(height)
+                        Button(action:{
+                            path.append("InstructionView")
                         }) {
                             Image("Howto")
                                 .renderingMode(.original)

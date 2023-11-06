@@ -11,6 +11,11 @@ import UIKit
 
 struct FourthView: View {
     @ObservedObject var model = ViewModel()
+    @Environment(\.managedObjectContext) private var context
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \ReportModel.reportid,ascending: true)],animation: .default)
+    private var reportid: FetchedResults<ReportModel>
+    
     @State var Theme1 = ""
     @State var Theme2 = ""
     
@@ -30,6 +35,7 @@ struct FourthView: View {
     @State private var selectedValue: String?
     @State private var presentationDetent = PresentationDetent.medium
     @State private var FinishReport = false
+    @State var RemoveArray:[Int] = []
    
     @Binding var memberArray:[String]
     @Binding var memberArray2:[String]
@@ -51,11 +57,15 @@ struct FourthView: View {
     @Binding var ResultCount2:Int
     @Binding var ThemeidArray:[String]
     @Binding var ReportidArray:[String]
+    @Binding var AllThemeArray1:[[String]]
+    @Binding var AllThemeArray2:[[String]]
+    @Binding var AllQuestionArray:[[String]]
     @Binding var AllThemeidArray:[[String]]
     @Binding var Theme1CounterArray:[Int]
     @Binding var Theme2CounterArray:[Int]
     @Binding var AllTheme1CounterArray:[[Int]]
     @Binding var AllTheme2CounterArray:[[Int]]
+    @Binding var AlreadyThemeArray:[[String]]
     
     var body: some View {
         let bounds = UIScreen.main.bounds
@@ -138,6 +148,9 @@ struct FourthView: View {
                                     Button("報告"){
                                         
                                         model.addReportData(question: selectedValue! ,name: CategoryArray[selection], notes: ThemeidArray[Themenumber])
+                                        let newThemeModel = ReportModel(context:context)
+                                        newThemeModel.reportid = ThemeidArray[Themenumber]
+                                        try? context.save()
                                         ReportidArray.append(ThemeidArray[Themenumber])
                                         print(ReportidArray)
                                         FinishReport = true
@@ -146,12 +159,48 @@ struct FourthView: View {
                                     }.alert("報告が完了しました",isPresented: $FinishReport){
                                         Button("OK"){
                                             showingModal = false
+                                            
+                                            if QuestionArray.count == 1{
+                                                ThemeArray1 = AllThemeArray1[selection-1]
+                                                ThemeArray2 = AllThemeArray2[selection-1]
+                                                QuestionArray = AllQuestionArray[selection-1]
+                                                ThemeidArray = AllThemeidArray[selection-1]
+                                                Theme1CounterArray = AllTheme1CounterArray[selection-1]
+                                                Theme2CounterArray = AllTheme2CounterArray[selection-1]
+                                                
+                                                
+                                                for number in 0..<reportid.count{
+                                                    if let index = ThemeidArray.firstIndex(of: reportid[number].reportid!){
+                                                        RemoveArray.append(index)
+                                                    }
+                                                }
+                                                
+                                                RemoveArray.sort{$0>$1}
+                                                
+                                                
+                                                for number in 0..<RemoveArray.count{
+                                                    
+                                                    ThemeArray1.remove(at: RemoveArray[number])
+                                                    ThemeArray2.remove(at: RemoveArray[number])
+                                                    QuestionArray.remove(at: RemoveArray[number])
+                                                    ThemeidArray.remove(at:RemoveArray[number])
+                                                    Theme1CounterArray.remove(at:RemoveArray[number])
+                                                    Theme2CounterArray.remove(at:RemoveArray[number])
+                                                    
+                                                }
+                                                AlreadyThemeArray[selection-1].removeAll()
+                                                RemoveArray.removeAll()
+                                            }
+                                            
+                                            
                                             if Themenumber == QuestionArray.count-1{
                                                 Themenumber = -1
                                             }
                                             Themenumber = Themenumber+1
                                             LeftTheme = false
                                             RightTheme = false
+                                            
+                                            
                                             
                                         }
                                     }
@@ -361,11 +410,15 @@ struct FourthView_Previews: PreviewProvider {
                    ResultCount2: .constant(1),
                    ThemeidArray: .constant(["id"]),
                    ReportidArray: .constant(["報告済のお題"]),
+                   AllThemeArray1: .constant([["お題1全部"]]),
+                   AllThemeArray2: .constant([["お題全部"]]),
+                   AllQuestionArray: .constant([["質問全部"]]),
                    AllThemeidArray: .constant([["ID全部"]]),
                    Theme1CounterArray: .constant([0]),
                    Theme2CounterArray: .constant([0]),
                    AllTheme1CounterArray: .constant([[0]]),
-                   AllTheme2CounterArray: .constant([[0]])
+                   AllTheme2CounterArray: .constant([[0]]),
+                   AlreadyThemeArray: .constant([["回答済のお題"]])
         )
     }
 }

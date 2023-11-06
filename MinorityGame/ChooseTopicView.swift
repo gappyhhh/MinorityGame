@@ -10,7 +10,15 @@ import Firebase
 import UIKit
 
 struct ChooseTopicView: View {
-    @Environment(\.managedObjectContext) private var context
+    
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \ThemeModel.ownid,ascending: true)],animation: .default)
+    private var items: FetchedResults<ThemeModel>
+    
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \ReportModel.reportid,ascending: true)],animation: .default)
+    private var reportid: FetchedResults<ReportModel>
+    
     @State private var selectedTab:Int = 0 //選択されているタブ（みんなのお題で遊ぶとお題を自分で作成）の番号
     @State private var canSwipe:Bool = false
         //タブの切り替えをスワイプで出来なくする判定
@@ -30,8 +38,8 @@ struct ChooseTopicView: View {
         //回答済+報告済のお題番号を格納
     @State var FirstRemovenumberArray:[Int] = []
         //報告済のお題番号を格納（時間経過でお題が更新された時に適用）
-    @State var SelfID = ""
-    @State var SelfGenre = ""
+    
+
     
     @Binding var memberArray:[String]
     @Binding var memberArray2:[String]
@@ -71,6 +79,7 @@ struct ChooseTopicView: View {
     @Binding var Theme2CounterArray:[Int]
     @Binding var AllTheme1CounterArray:[[Int]]
     @Binding var AllTheme2CounterArray:[[Int]]
+    @Binding var Upload:Bool
     @EnvironmentObject var alreadyselection:AlreadySelection
     
     
@@ -150,14 +159,10 @@ struct ChooseTopicView: View {
                                             
                                         }
                                         //↓このif文機能してないから消す(ジャンル選択で毎回読み取りする場合は消さない）
-                                        if AllreportidArray.count>0 {
-                                            for number in 0..<AllreportidArray.count{
-                                                if let index = ThemeidArray.firstIndex(of: AllreportidArray[number]){
+                                        if reportid.count>0 {
+                                            for number in 0..<reportid.count{
+                                                if let index = ThemeidArray.firstIndex(of: reportid[number].reportid!){
                                                     FirstRemovenumberArray.append(index)
-//                                                    ThemeArray1.remove(at: index)
-//                                                    ThemeArray2.remove(at: index)
-//                                                    QuestionArray.remove(at: index)
-//                                                    ThemeidArray.remove(at:index)
                                                 }
                                             }
                                             
@@ -278,14 +283,10 @@ struct ChooseTopicView: View {
                                                 
                                                 //アプリがバックグラウンドにある状態で10分以上経つ+その前に報告されたお題がある場合、以下が実行される
                                                 //読み取ったお題から報告されたお題を取り除く
-                                                if AllreportidArray.count>0 {
-                                                    for number in 0..<AllreportidArray.count{
-                                                        if let index = ThemeidArray.firstIndex(of: AllreportidArray[number]){
+                                                if reportid.count>0 {
+                                                    for number in 0..<reportid.count{
+                                                        if let index = ThemeidArray.firstIndex(of: reportid[number].reportid!){
                                                             FirstRemovenumberArray.append(index)
-//                                                            ThemeArray1.remove(at: index)
-//                                                            ThemeArray2.remove(at: index)
-//                                                            QuestionArray.remove(at: index)
-//                                                            ThemeidArray.remove(at:index)
                                                             
                                                         }
                                                     }
@@ -306,6 +307,7 @@ struct ChooseTopicView: View {
                                                 Themenumber = Int.random(in: 0...ThemeArray1.count-1)
                                                 print(QuestionArray)
                                                 print(ThemeidArray)
+                                                FirstRemovenumberArray.removeAll()
                                                 //FourthViewへ遷移
                                                 path.append("FourthView")
                                                 alreadyselection.AlreadySelectionArray.append(selection)
@@ -321,13 +323,22 @@ struct ChooseTopicView: View {
                                         //二回目以降のジャンルを選択した場合の処理
                                         print("二回目")
                                         DispatchQueue.main.asyncAfter(deadline: .now()+3) {
-                                            //以前に回答済+報告されたお題番号を、ジャンル内で検出しRemovenumberArrayに格納
+                                            //以前に回答済のお題を、ジャンル内で検出しRemovenumberArrayに格納
                                             for number in 0..<AlreadyThemeArray[selection-1].count{
                                                 if let index = AllThemeidArray[selection-1].firstIndex(of: AlreadyThemeArray[selection-1][number]){
                                                     RemovenumberArray.append(index)
                                                     
                                                 }
                                             }
+                                            if reportid.count>0{
+                                                for number in 0..<reportid.count{
+                                                    if let index = AllThemeidArray[selection-1].firstIndex(of: reportid[number].reportid!){
+                                                        RemovenumberArray.append(index)
+                                                        
+                                                    }
+                                                }
+                                            }
+                                            
                                             //正確にお題を除去できるようRemovenumberArrayを昇順に並び替える
                                             RemovenumberArray.sort{$0>$1}
                                             
@@ -354,6 +365,7 @@ struct ChooseTopicView: View {
                                             
                                             //出題するお題番号をランダムに決定
                                             Themenumber = Int.random(in: 0...ThemeArray1.count-1)
+                                            RemovenumberArray.removeAll()
                                             path.append("FourthView")
                                         }
                                     }
@@ -517,12 +529,7 @@ struct ChooseTopicView: View {
                                 .alert("作成したお題をオンラインで\n公開しますか？",isPresented: $Decide){
                                     Button("はい"){
                                         //質問、お題1、お題2をfirebaseにアップロード
-                                        SelfID = model.addData(Theme:CategoryArray[selection],question: Question,name: Theme1, notes: Theme2)
-                                        print(SelfID)
-                                        let newThemeModel = ThemeModel(context:context)
-                                        newThemeModel.ownid = SelfID
-                                        newThemeModel.genre = CategoryArray[selection]
-                                        try? context.save()
+                                        Upload = true
                                         path.append("OfflineView")
                                             
                                     }
@@ -615,7 +622,8 @@ struct ChooseTopicView_Previews: PreviewProvider {
                         Theme1CounterArray: .constant([0]),
                         Theme2CounterArray: .constant([0]),
                         AllTheme1CounterArray: .constant([[0]]),
-                        AllTheme2CounterArray: .constant([[0]])
+                        AllTheme2CounterArray: .constant([[0]]),
+                        Upload: .constant(false)
                         )
     }
 }

@@ -10,6 +10,11 @@ import Firebase
 
 struct ResultView: View {
     @State private var selectedTab:Int = 0
+    @State private var NextRemovenumberArray:[Int] = []
+    @State private var NextReportRemovenumberArray:[Int] = []
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \ReportModel.reportid,ascending: true)],animation: .default)
+    private var reportid: FetchedResults<ReportModel>
     @ObservedObject var model = ViewModel()
     @Binding var memberArray:[String]
     @Binding var memberArray2:[String]
@@ -42,12 +47,15 @@ struct ResultView: View {
     @Binding var AllTheme1CounterArray:[[Int]]
     @Binding var AllTheme2CounterArray:[[Int]]
     
+    @State var ONlineAllResultShow_red: Bool = false
+    @State var ONlineAllResultShow_white: Bool = false
+    
     @State var isPresented: Bool = false
     var body: some View {
         let bounds = UIScreen.main.bounds
         let width = Int(bounds.width)
         let height = Int(bounds.height)
-        let list:[String] = ["結果","全国"]
+        let list:[String] = ["結果","全国の投票数"]
         
         VStack(spacing:0){
             
@@ -193,28 +201,29 @@ struct ResultView: View {
                         HStack(alignment: .center,spacing:0){
                             // 「ジャンル選択へ」ボタンの定義
                             Button(action:{
-                                model.updateData(Theme: CategoryArray[selection], id: ThemeidArray[Themenumber], ResultCounter1: ResultCount1+Theme1CounterArray[Themenumber], ResultCounter2: ResultCount2+Theme2CounterArray[Themenumber])
-                                
-                                if let index = AllThemeidArray[selection-1].firstIndex(of:ThemeidArray[Themenumber]){
-                                    AllTheme1CounterArray[selection-1][index] = ResultCount1 + Theme1CounterArray[Themenumber]}
-                                if let index = AllThemeidArray[selection-1].firstIndex(of:ThemeidArray[Themenumber]){
-                                    AllTheme2CounterArray[selection-1][index] = ResultCount2 + Theme2CounterArray[Themenumber]}
+//                                model.updateData(Theme: CategoryArray[selection], id: ThemeidArray[Themenumber], ResultCounter1: ResultCount1+Theme1CounterArray[Themenumber], ResultCounter2: ResultCount2+Theme2CounterArray[Themenumber])
+//
+//                                if let index = AllThemeidArray[selection-1].firstIndex(of:ThemeidArray[Themenumber]){
+//                                    AllTheme1CounterArray[selection-1][index] = ResultCount1 + Theme1CounterArray[Themenumber]}
+//                                if let index = AllThemeidArray[selection-1].firstIndex(of:ThemeidArray[Themenumber]){
+//                                    AllTheme2CounterArray[selection-1][index] = ResultCount2 + Theme2CounterArray[Themenumber]}
                                 //                        AllTheme1CounterArray[selection-1][Themenumber] = ResultCount1 + Theme1CounterArray[Themenumber]
                                 //                        AllTheme2CounterArray[selection-1][Themenumber] = ResultCount2 + Theme2CounterArray[Themenumber]
                                 
                                 ResultMemberArray1.removeAll()
                                 ResultMemberArray2.removeAll()
                                 AlreadyThemeArray[selection-1].append(ThemeidArray[Themenumber])
-                                for num in 0..<ReportidArray.count{
-                                    AlreadyThemeArray[selection-1].append(ReportidArray[num])
-                                    AllReportidArray.append(ReportidArray[num])
-                                }
-                                print(AllThemeidArray[selection-1].count,AlreadyThemeArray[selection-1].count)
+                                
+//                                for num in 0..<ReportidArray.count{
+//                                    AlreadyThemeArray[selection-1].append(ReportidArray[num])
+//                                    AllReportidArray.append(ReportidArray[num])
+//                                }
+//                                print(AllThemeidArray[selection-1].count,AlreadyThemeArray[selection-1].count)
                                 if AlreadyThemeArray[selection-1].count == AllThemeidArray[selection-1].count{
-                                    AlreadyThemeArray[selection-1] = AllReportidArray
+                                    AlreadyThemeArray[selection-1].removeAll()
                                 }
-                                print(AllThemeidArray)
-                                print(AlreadyThemeArray)
+//                                print(AllThemeidArray)
+//                                print(AlreadyThemeArray)
                                 
                                 ReportidArray = []
                                 selection = 0
@@ -230,34 +239,81 @@ struct ResultView: View {
                             // 「次の問題へ」ボタンの定義
                             Button(action:{
                                 
-                                model.updateData(Theme: CategoryArray[selection], id: ThemeidArray[Themenumber], ResultCounter1: ResultCount1+Theme1CounterArray[Themenumber], ResultCounter2: ResultCount2+Theme2CounterArray[Themenumber])
-                                if let index = AllThemeidArray[selection-1].firstIndex(of:ThemeidArray[Themenumber]){
-                                    AllTheme1CounterArray[selection-1][index] = ResultCount1 + Theme1CounterArray[Themenumber]}
-                                if let index = AllThemeidArray[selection-1].firstIndex(of:ThemeidArray[Themenumber]){
-                                    AllTheme2CounterArray[selection-1][index] = ResultCount2 + Theme2CounterArray[Themenumber]}
+//                                model.updateData(Theme: CategoryArray[selection], id: ThemeidArray[Themenumber], ResultCounter1: ResultCount1+Theme1CounterArray[Themenumber], ResultCounter2: ResultCount2+Theme2CounterArray[Themenumber])
+//                                if let index = AllThemeidArray[selection-1].firstIndex(of:ThemeidArray[Themenumber]){
+//                                    AllTheme1CounterArray[selection-1][index] = ResultCount1 + Theme1CounterArray[Themenumber]}
+//                                if let index = AllThemeidArray[selection-1].firstIndex(of:ThemeidArray[Themenumber]){
+//                                    AllTheme2CounterArray[selection-1][index] = ResultCount2 + Theme2CounterArray[Themenumber]}
                                 //                        Theme2CounterArray[Themenumber] = ResultCount2 + Theme2CounterArray[Themenumber]
                                 ResultMemberArray1.removeAll()
                                 ResultMemberArray2.removeAll()
                                 AlreadyThemeArray[selection-1].append(ThemeidArray[Themenumber])
                                 
-                                for num in 0..<ReportidArray.count{
-                                    AlreadyThemeArray[selection-1].append(ReportidArray[num])
-                                    AllReportidArray.append(ReportidArray[num])
-                                }
-                                print(AlreadyThemeArray)
-                                print(AllReportidArray)
+//                                for num in 0..<ReportidArray.count{
+//                                    AlreadyThemeArray[selection-1].append(ReportidArray[num])
+//                                    AllReportidArray.append(ReportidArray[num])
+//                                }
+//                                print(AlreadyThemeArray)
+//                                print(AllReportidArray)
                                 
                                 //↓昇順に並び替える必要あるかも
+//                                for number in 0..<AlreadyThemeArray[selection-1].count{
+//                                    if let index = ThemeidArray.firstIndex(of: AlreadyThemeArray[selection-1][number]){
+//                                        ThemeArray1.remove(at: index)
+//                                        ThemeArray2.remove(at: index)
+//                                        QuestionArray.remove(at: index)
+//                                        ThemeidArray.remove(at:index)
+//                                        Theme1CounterArray.remove(at:index)
+//                                        Theme2CounterArray.remove(at:index)
+//                                    }
+//                                }
+//                                if QuestionArray.isEmpty == true{
+//                                    ThemeArray1 = AllThemeArray1[selection-1]
+//                                    ThemeArray2 = AllThemeArray2[selection-1]
+//                                    QuestionArray = AllQuestionArray[selection-1]
+//                                    ThemeidArray = AllThemeidArray[selection-1]
+//                                    Theme1CounterArray = AllTheme1CounterArray[selection-1]
+//                                    Theme2CounterArray = AllTheme2CounterArray[selection-1]
+//
+//                                    for number in 0..<AllReportidArray.count{
+//                                        if let index = ThemeidArray.firstIndex(of: AllReportidArray[number]){
+//                                            ThemeArray1.remove(at: index)
+//                                            ThemeArray2.remove(at: index)
+//                                            QuestionArray.remove(at: index)
+//                                            ThemeidArray.remove(at:index)
+//                                            Theme1CounterArray.remove(at:index)
+//                                            Theme2CounterArray.remove(at:index)
+//                                        }
+//                                    }
+//                                    AlreadyThemeArray[selection-1] = AllReportidArray
+//                                }
+//                                Themenumber = Int.random(in: 0...ThemeArray1.count-1)
                                 for number in 0..<AlreadyThemeArray[selection-1].count{
                                     if let index = ThemeidArray.firstIndex(of: AlreadyThemeArray[selection-1][number]){
-                                        ThemeArray1.remove(at: index)
-                                        ThemeArray2.remove(at: index)
-                                        QuestionArray.remove(at: index)
-                                        ThemeidArray.remove(at:index)
-                                        Theme1CounterArray.remove(at:index)
-                                        Theme2CounterArray.remove(at:index)
+                                        NextRemovenumberArray.append(index)
                                     }
                                 }
+                                
+                                if reportid.count>0{
+                                    for number in 0..<reportid.count{
+                                        if let index = ThemeidArray.firstIndex(of: reportid[number].reportid!){
+                                            NextRemovenumberArray.append(index)
+                                        }
+                                    }
+                                }
+                                
+                                NextRemovenumberArray.sort{$0>$1}
+                                for number in 0..<NextRemovenumberArray.count{
+                                     
+                                        ThemeArray1.remove(at: NextRemovenumberArray[number])
+                                        ThemeArray2.remove(at: NextRemovenumberArray[number])
+                                        QuestionArray.remove(at: NextRemovenumberArray[number])
+                                        ThemeidArray.remove(at:NextRemovenumberArray[number])
+                                        Theme1CounterArray.remove(at:NextRemovenumberArray[number])
+                                        Theme2CounterArray.remove(at:NextRemovenumberArray[number])
+                                    
+                                }
+                                
                                 if QuestionArray.isEmpty == true{
                                     ThemeArray1 = AllThemeArray1[selection-1]
                                     ThemeArray2 = AllThemeArray2[selection-1]
@@ -266,22 +322,32 @@ struct ResultView: View {
                                     Theme1CounterArray = AllTheme1CounterArray[selection-1]
                                     Theme2CounterArray = AllTheme2CounterArray[selection-1]
                                     
-                                    for number in 0..<AllReportidArray.count{
-                                        if let index = ThemeidArray.firstIndex(of: AllReportidArray[number]){
-                                            ThemeArray1.remove(at: index)
-                                            ThemeArray2.remove(at: index)
-                                            QuestionArray.remove(at: index)
-                                            ThemeidArray.remove(at:index)
-                                            Theme1CounterArray.remove(at:index)
-                                            Theme2CounterArray.remove(at:index)
+                                    for number in 0..<reportid.count{
+                                        if let index = ThemeidArray.firstIndex(of: reportid[number].reportid!){
+                                            NextReportRemovenumberArray.append(index)
                                         }
                                     }
-                                    AlreadyThemeArray[selection-1] = AllReportidArray
+                                    
+                                    NextReportRemovenumberArray.sort{$0>$1}
+                                    
+                                    for number in 0..<NextReportRemovenumberArray.count{
+                                         
+                                            ThemeArray1.remove(at: NextReportRemovenumberArray[number])
+                                            ThemeArray2.remove(at: NextReportRemovenumberArray[number])
+                                            QuestionArray.remove(at: NextReportRemovenumberArray[number])
+                                            ThemeidArray.remove(at:NextReportRemovenumberArray[number])
+                                            Theme1CounterArray.remove(at:NextReportRemovenumberArray[number])
+                                            Theme2CounterArray.remove(at:NextReportRemovenumberArray[number])
+                                        
+                                    }
+                                    
+                                    AlreadyThemeArray[selection-1].removeAll()
                                 }
                                 Themenumber = Int.random(in: 0...ThemeArray1.count-1)
-                                
                                 ReportidArray = []
                                 print(QuestionArray)
+                                NextRemovenumberArray.removeAll()
+                                NextReportRemovenumberArray.removeAll()
                                 path.append("FourthView")
                             }) {
                                 Image("NextTheme")
@@ -384,8 +450,23 @@ struct ResultView: View {
                                     .frame(width:CGFloat(width)/2.4,
                                            height:(CGFloat(height)/2.2) * ((CGFloat(Theme1CounterArray[Themenumber])+CGFloat(ResultCount1)) / (CGFloat(Theme1CounterArray[Themenumber])+CGFloat(Theme2CounterArray[Themenumber])+CGFloat(ResultCount1)+CGFloat(ResultCount2))))
                                     .foregroundColor(Color.black)
-                                    .background(ONlineResultShow_red ? .white:.red)
                                     .font(.system(size:CGFloat(height)/45))
+                                    .background(ONlineAllResultShow_red ? .red:.white)
+                                    .onAppear{
+                                        if Theme1CounterArray[Themenumber]+ResultCount1 > Theme2CounterArray[Themenumber]+ResultCount2{
+                                            ONlineAllResultShow_red = false
+                                            ONlineAllResultShow_white = true
+                                        }
+                                        if Theme1CounterArray[Themenumber]+ResultCount1 == Theme2CounterArray[Themenumber]+ResultCount2{
+                                            ONlineAllResultShow_red = false
+                                            ONlineAllResultShow_white = false
+                                        }
+                                        
+                                        if Theme1CounterArray[Themenumber]+ResultCount1 < Theme2CounterArray[Themenumber]+ResultCount2{
+                                            ONlineAllResultShow_red = true
+                                            ONlineAllResultShow_white = false
+                                        }
+                                    }
                             }
                             
                             VStack(spacing:0){
@@ -411,7 +492,7 @@ struct ResultView: View {
                                     .frame(width:CGFloat(width)/2.4,
                                            height:(CGFloat(height)/2.2) * ((CGFloat(Theme2CounterArray[Themenumber])+CGFloat(ResultCount2)) / (CGFloat(Theme1CounterArray[Themenumber])+CGFloat(Theme2CounterArray[Themenumber])+CGFloat(ResultCount1)+CGFloat(ResultCount2))))
                                     .foregroundColor(Color.black)
-                                    .background(ONlineResultShow_white ? .white:.red)
+                                    .background(ONlineAllResultShow_white ? .red:.white)
                                     .font(.system(size:CGFloat(height)/45))
                             }
                         }
@@ -435,17 +516,17 @@ struct ResultView: View {
                                 ResultMemberArray1.removeAll()
                                 ResultMemberArray2.removeAll()
                                 AlreadyThemeArray[selection-1].append(ThemeidArray[Themenumber])
-                                for num in 0..<ReportidArray.count{
-                                    AlreadyThemeArray[selection-1].append(ReportidArray[num])
-                                    AllReportidArray.append(ReportidArray[num])
-                                }
-                                print(AllThemeidArray[selection-1].count,AlreadyThemeArray[selection-1].count)
+//                                for num in 0..<ReportidArray.count{
+//                                    AlreadyThemeArray[selection-1].append(ReportidArray[num])
+//                                    AllReportidArray.append(ReportidArray[num])
+//                                }
+//                                print(AllThemeidArray[selection-1].count,AlreadyThemeArray[selection-1].count)
                                 if AlreadyThemeArray[selection-1].count == AllThemeidArray[selection-1].count{
-                                    AlreadyThemeArray[selection-1] = AllReportidArray
+                                    AlreadyThemeArray[selection-1].removeAll()
                                 }
-                                print(AllThemeidArray)
-                                print(AlreadyThemeArray)
-                                
+//                                print(AllThemeidArray)
+//                                print(AlreadyThemeArray)
+//
                                 ReportidArray = []
                                 selection = 0
                                 path.append("ChooseTopicView")
@@ -470,24 +551,40 @@ struct ResultView: View {
                                 ResultMemberArray2.removeAll()
                                 AlreadyThemeArray[selection-1].append(ThemeidArray[Themenumber])
                                 
-                                for num in 0..<ReportidArray.count{
-                                    AlreadyThemeArray[selection-1].append(ReportidArray[num])
-                                    AllReportidArray.append(ReportidArray[num])
-                                }
-                                print(AlreadyThemeArray)
-                                print(AllReportidArray)
+//                                for num in 0..<ReportidArray.count{
+//                                    AlreadyThemeArray[selection-1].append(ReportidArray[num])
+//                                    AllReportidArray.append(ReportidArray[num])
+//                                }
+//                                print(AlreadyThemeArray)
+//                                print(AllReportidArray)
                                 
                                 //↓昇順に並び替える必要あるかも
                                 for number in 0..<AlreadyThemeArray[selection-1].count{
                                     if let index = ThemeidArray.firstIndex(of: AlreadyThemeArray[selection-1][number]){
-                                        ThemeArray1.remove(at: index)
-                                        ThemeArray2.remove(at: index)
-                                        QuestionArray.remove(at: index)
-                                        ThemeidArray.remove(at:index)
-                                        Theme1CounterArray.remove(at:index)
-                                        Theme2CounterArray.remove(at:index)
+                                        NextRemovenumberArray.append(index)
                                     }
                                 }
+                                
+                                if reportid.count>0{
+                                    for number in 0..<reportid.count{
+                                        if let index = ThemeidArray.firstIndex(of: reportid[number].reportid!){
+                                            NextRemovenumberArray.append(index)
+                                        }
+                                    }
+                                }
+                                
+                                NextRemovenumberArray.sort{$0>$1}
+                                for number in 0..<NextRemovenumberArray.count{
+                                     
+                                        ThemeArray1.remove(at: NextRemovenumberArray[number])
+                                        ThemeArray2.remove(at: NextRemovenumberArray[number])
+                                        QuestionArray.remove(at: NextRemovenumberArray[number])
+                                        ThemeidArray.remove(at:NextRemovenumberArray[number])
+                                        Theme1CounterArray.remove(at:NextRemovenumberArray[number])
+                                        Theme2CounterArray.remove(at:NextRemovenumberArray[number])
+                                    
+                                }
+                                
                                 if QuestionArray.isEmpty == true{
                                     ThemeArray1 = AllThemeArray1[selection-1]
                                     ThemeArray2 = AllThemeArray2[selection-1]
@@ -496,20 +593,31 @@ struct ResultView: View {
                                     Theme1CounterArray = AllTheme1CounterArray[selection-1]
                                     Theme2CounterArray = AllTheme2CounterArray[selection-1]
                                     
-                                    for number in 0..<AllReportidArray.count{
-                                        if let index = ThemeidArray.firstIndex(of: AllReportidArray[number]){
-                                            ThemeArray1.remove(at: index)
-                                            ThemeArray2.remove(at: index)
-                                            QuestionArray.remove(at: index)
-                                            ThemeidArray.remove(at:index)
-                                            Theme1CounterArray.remove(at:index)
-                                            Theme2CounterArray.remove(at:index)
+                                    for number in 0..<reportid.count{
+                                        if let index = ThemeidArray.firstIndex(of: reportid[number].reportid!){
+                                            NextReportRemovenumberArray.append(index)
                                         }
                                     }
-                                    AlreadyThemeArray[selection-1] = AllReportidArray
+                                    
+                                    NextReportRemovenumberArray.sort{$0>$1}
+                                    
+                                    for number in 0..<NextReportRemovenumberArray.count{
+                                         
+                                            ThemeArray1.remove(at: NextReportRemovenumberArray[number])
+                                            ThemeArray2.remove(at: NextReportRemovenumberArray[number])
+                                            QuestionArray.remove(at: NextReportRemovenumberArray[number])
+                                            ThemeidArray.remove(at:NextReportRemovenumberArray[number])
+                                            Theme1CounterArray.remove(at:NextReportRemovenumberArray[number])
+                                            Theme2CounterArray.remove(at:NextReportRemovenumberArray[number])
+                                        
+                                    }
+                                    
+                                    AlreadyThemeArray[selection-1].removeAll()
                                 }
                                 Themenumber = Int.random(in: 0...ThemeArray1.count-1)
                                 
+                                NextRemovenumberArray.removeAll()
+                                NextReportRemovenumberArray.removeAll()
                                 ReportidArray = []
                                 print(QuestionArray)
                                 path.append("FourthView")
